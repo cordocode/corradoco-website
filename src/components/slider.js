@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import './slider.css';
+import './Slider.css';
 
 const Slider = ({ 
   value, 
