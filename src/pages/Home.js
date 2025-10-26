@@ -3,6 +3,8 @@ import './Home.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Slider from '../components/Slider';
+import BIRDS from 'vanta/dist/vanta.birds.min';
+// NOTE: Three.js loaded via CDN in index.html - see instructions
 
 // Import partner logos from assets folder (via symlink)
 import fleetAdvisor from '../assets/customer-logos/fleet_advisor.svg';
@@ -11,6 +13,10 @@ import norcon from '../assets/customer-logos/norcon.svg';
 import reliant from '../assets/customer-logos/reliant.svg';
 
 const Home = () => {
+  // ============ VANTA BIRDS EFFECT ============
+  const [vantaEffect, setVantaEffect] = useState(null);
+  const vantaRef = useRef(null);
+
   // ============ CHATBOX STATE ============
   const [hoursPerWeek, setHoursPerWeek] = useState(5);
   const [employees, setEmployees] = useState(2);
@@ -34,6 +40,39 @@ const Home = () => {
     { id: 7, src: norcon, alt: 'Norcon', name: 'norcon' },
     { id: 8, src: reliant, alt: 'Reliant', name: 'reliant' },
   ];
+
+  // ============ VANTA BIRDS INITIALIZATION (using CDN THREE) ============
+  useEffect(() => {
+    if (!vantaEffect && window.THREE) {
+      setVantaEffect(
+        BIRDS({
+          el: vantaRef.current,
+          THREE: window.THREE, // Use THREE from CDN
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          scale: 1.00,
+          scaleMobile: 1.00,
+          backgroundColor: 0xffffff, // White, but made transparent with backgroundAlpha
+          backgroundAlpha: 0.00, // Fully transparent - your cream background shows through!
+          color1: 0x0a2005, // Dark green/blue bird color
+          color2: 0x111101, // Very dark color
+          birdSize: 1.10,
+          wingSpan: 20.00,
+          speedLimit: 6.00,
+          separation: 19.00,
+          alignment: 33.00,
+          cohesion: 20.00,
+          quantity: 1.00,
+        })
+      );
+    }
+    return () => {
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, [vantaEffect]);
 
   // ============ CHATBOX FUNCTIONS ============
   const formatSalary = (value) => {
@@ -130,8 +169,8 @@ const Home = () => {
     <div className="home">
       <Header />
       
-      {/* HERO SECTION */}
-      <section className="hero">
+      {/* HERO SECTION WITH VANTA BIRDS BACKGROUND */}
+      <section className="hero" ref={vantaRef}>
         <div className="hero-container">
           <h1 className="hero-headline">
             Your Partner in Custom Automation.
