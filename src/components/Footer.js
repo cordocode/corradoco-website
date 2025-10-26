@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Footer.css';
 
 const Footer = () => {
@@ -18,18 +19,6 @@ const Footer = () => {
 
   return (
     <footer className="footer">
-      {/* CTA Section */}
-      <div className="footer-cta">
-        <div className="footer-cta-container">
-          <h2 className="footer-cta-title">
-            Efficiency Without Compromise
-          </h2>
-          <a href="mailto:ben@corradoco.com" className="footer-cta-button">
-            Book Your Free Automation Audit
-          </a>
-        </div>
-      </div>
-
       {/* Main Footer Content */}
       <div className="footer-main">
         <div className="footer-container">
@@ -54,9 +43,9 @@ const Footer = () => {
             <div className="footer-column">
               <h3 className="footer-heading">Resources</h3>
               <nav className="footer-nav">
-                <a href="/blog" className="footer-link">Blog</a>
-                <a href="/about" className="footer-link">About</a>
-                <a href="/calculator" className="footer-link">Calculator</a>
+                <Link to="/blog" className="footer-link">Blog</Link>
+                <Link to="/about" className="footer-link">About</Link>
+                <Link to="/calculator" className="footer-link">Calculator</Link>
               </nav>
             </div>
 
@@ -90,16 +79,9 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="footer-bottom">
         <div className="footer-bottom-container">
-          <div className="footer-bottom-left">
-            <p className="footer-copyright">
-              © 2025 Corrado & Co. · Founded in Denver
-            </p>
-          </div>
-          <div className="footer-bottom-right">
-            <a href="/privacy" className="footer-legal-link">Privacy Policy</a>
-            <span className="footer-separator">·</span>
-            <a href="/terms" className="footer-legal-link">Terms of Service</a>
-          </div>
+          <p className="footer-copyright">
+            © 2025 Corrado & Co. · Founded in Denver
+          </p>
         </div>
       </div>
     </footer>

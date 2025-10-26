@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Slider from '../components/Slider';
 
-// Import partner logos from assets folder
+// Import partner logos from assets folder (via symlink)
 import fleetAdvisor from '../assets/customer-logos/fleet_advisor.svg';
 import vwco from '../assets/customer-logos/vwco.svg';
 import norcon from '../assets/customer-logos/norcon.svg';
@@ -251,6 +251,18 @@ const Home = () => {
           <div className="partner-descriptions">
             {/* TODO: Add partner descriptions */}
           </div>
+        </div>
+      </section>
+
+      {/* CTA SECTION */}
+      <section className="home-cta">
+        <div className="home-cta-container">
+          <h2 className="home-cta-title">
+            Efficiency Without Compromise
+          </h2>
+          <a href="mailto:ben@corradoco.com" className="home-cta-button">
+            Book Your Free Automation Audit
+          </a>
         </div>
       </section>
 

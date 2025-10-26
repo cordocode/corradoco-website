@@ -1,6 +1,6 @@
 .footer {
   background-color: #ffffe2;
-  border-top: 1px solid #d4d4d4;
+  border-top: 1px solid #1a1a1a;
   margin-top: 60px;
 }
 
@@ -8,7 +8,7 @@
 .footer-cta {
   padding: 60px 20px;
   background: linear-gradient(135deg, rgba(212, 165, 116, 0.03) 0%, rgba(212, 165, 116, 0.01) 100%);
-  border-bottom: 1px solid #d4d4d4;
+  border-bottom: 1px solid #1a1a1a;
 }
 
 .footer-cta-container {
@@ -154,7 +154,7 @@
   display: flex;
   gap: 0;
   margin-bottom: 6px;
-  border: 1px solid #d4d4d4;
+  border: 1px solid #1a1a1a;
   background-color: rgba(255, 255, 255, 0.3);
   transition: border-color 0.3s ease;
   max-width: 280px;
@@ -184,7 +184,7 @@
   background-color: transparent;
   color: #1a1a1a;
   border: none;
-  border-left: 1px solid #d4d4d4;
+  border-left: 1px solid #1a1a1a;
   cursor: pointer;
   font-size: 16px;
   transition: all 0.3s ease;
@@ -213,7 +213,7 @@
 
 /* Bottom Bar */
 .footer-bottom {
-  border-top: 1px solid #d4d4d4;
+  border-top: 1px solid #1a1a1a;
   padding: 20px;
   background-color: rgba(26, 26, 26, 0.02);
 }

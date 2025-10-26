@@ -322,6 +322,52 @@
 }
 
 /* ============================================
+   CTA SECTION
+   ============================================ */
+.home-cta {
+  padding: 60px 20px;
+  background: linear-gradient(135deg, rgba(212, 165, 116, 0.03) 0%, rgba(212, 165, 116, 0.01) 100%);
+  border-top: 1px solid #d4d4d4;
+  /* border-bottom removed to prevent double line with footer */
+  margin-top: 60px;
+}
+
+.home-cta-container {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.home-cta-title {
+  font-family: 'Khand', sans-serif;
+  font-size: 42px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin-bottom: 24px;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.home-cta-button {
+  display: inline-block;
+  padding: 12px 28px;
+  background-color: #1a1a1a;
+  color: #ffffe2;
+  text-decoration: none;
+  font-family: 'Array', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  border: 2px solid #1a1a1a;
+}
+
+.home-cta-button:hover {
+  background-color: transparent;
+  color: #1a1a1a;
+}
+
+/* ============================================
    RESPONSIVE DESIGN
    ============================================ */
 @media (max-width: 1200px) {
@@ -348,6 +394,22 @@
   
   .hero-subheadline {
     font-size: 18px;
+  }
+  
+  /* CTA responsive */
+  .home-cta {
+    padding: 40px 20px;
+    margin-top: 40px;
+  }
+  
+  .home-cta-title {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+  
+  .home-cta-button {
+    padding: 11px 22px;
+    font-size: 13px;
   }
   
   /* Chatbox responsive */
