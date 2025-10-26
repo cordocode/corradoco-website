@@ -1,0 +1,15 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Array', sans-serif;
+  color: #4a4a4a;
+}
+
+.App {
+  min-height: 100vh;
+  background-color: #ffffe2;
+}
