@@ -3,8 +3,9 @@ import './Home.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Slider from '../components/Slider';
+import Modal from '../components/Modal';
 import BIRDS from 'vanta/dist/vanta.birds.min';
-// NOTE: Three.js loaded via CDN in index.html - see instructions
+// NOTE: Three.js loaded via CDN in index.html
 
 // Import partner logos from assets folder (via symlink)
 import fleetAdvisor from '../assets/customer-logos/fleet_advisor.svg';
@@ -16,6 +17,9 @@ const Home = () => {
   // ============ VANTA BIRDS EFFECT ============
   const [vantaEffect, setVantaEffect] = useState(null);
   const vantaRef = useRef(null);
+
+  // ============ MODAL STATE ============
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // ============ CHATBOX STATE ============
   const [hoursPerWeek, setHoursPerWeek] = useState(5);
@@ -47,7 +51,7 @@ const Home = () => {
       setVantaEffect(
         BIRDS({
           el: vantaRef.current,
-          THREE: window.THREE, // Use THREE from CDN
+          THREE: window.THREE,
           mouseControls: true,
           touchControls: true,
           gyroControls: false,
@@ -55,10 +59,10 @@ const Home = () => {
           minWidth: 200.00,
           scale: 1.00,
           scaleMobile: 1.00,
-          backgroundColor: 0xffffff, // White, but made transparent with backgroundAlpha
-          backgroundAlpha: 0.00, // Fully transparent - your cream background shows through!
-          color1: 0x0a2005, // Dark green/blue bird color
-          color2: 0x111101, // Very dark color
+          backgroundColor: 0xffffff,
+          backgroundAlpha: 0.00,
+          color1: 0x0a2005,
+          color2: 0x111101,
           birdSize: 1.10,
           wingSpan: 20.00,
           speedLimit: 6.00,
@@ -178,6 +182,9 @@ const Home = () => {
           <p className="hero-subheadline">
             We help you identify, design, and build tailored automations — blending AI, current software, and low-code tools into one cohesive system.
           </p>
+          <button className="hero-cta-button" onClick={() => setIsModalOpen(true)}>
+            See What's Possible
+          </button>
         </div>
       </section>
 
@@ -306,6 +313,12 @@ const Home = () => {
       </section>
 
       <Footer />
+
+      {/* REUSABLE MODAL */}
+      <Modal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
