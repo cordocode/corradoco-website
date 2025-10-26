@@ -2,16 +2,18 @@ import React from 'react';
 import './App.css';
 import Header from './components/Header';
 import Hero from './components/Hero';
+import ChatBox from './components/ChatBox';
 import Partners from './components/Partners';
-// import ChatBox from './components/ChatBox'; // Uncomment when ChatBox is ready
+import Footer from './components/Footer';
 
 function App() {
   return (
     <div className="App">
       <Header />
       <Hero />
-      {/* <ChatBox /> */} {/* Add ChatBox component here when ready */}
+      <ChatBox />
       <Partners />
+      <Footer />
     </div>
   );
 }
