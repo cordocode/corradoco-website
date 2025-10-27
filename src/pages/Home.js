@@ -28,6 +28,7 @@ const Home = () => {
   const [chatStarted, setChatStarted] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
+  const [showArrow, setShowArrow] = useState(false);
 
   // ============ PARTNERS CAROUSEL STATE ============
   const scrollRef = useRef(null);
@@ -83,24 +84,34 @@ const Home = () => {
     return value.toLocaleString('en-US');
   };
   
-  const handleSendMessage = () => {
+  const handleSliderChange = (setter) => (value) => {
+    setter(value);
     if (!chatStarted) {
+      setShowArrow(true);
+    }
+  };
+  
+  const handleSendMessage = () => {
+    setShowArrow(false); // Hide arrow when send is clicked
+    
+    if (!chatStarted) {
+      // Calculate annual value of time saved
       const hoursPerYear = hoursPerWeek * 52;
-      const hourlyRate = avgSalary / 2080;
+      const hourlyRate = avgSalary / 2080; // 2080 = 40 hours/week * 52 weeks/year
       const totalValue = Math.round(hoursPerYear * employees * hourlyRate);
       
-      const userMessage = {
-        type: 'user',
-        content: `Imagine automating a process that saves ${hoursPerWeek} hours per week for ${employees} employees who make about $${formatSalary(avgSalary)} per year.`
-      };
-      
-      const aiResponse = {
-        type: 'ai',
-        content: `Wow — that automation would be worth $${totalValue.toLocaleString('en-US')} in annual value. What process did you have in mind?`
-      };
-      
-      setMessages([userMessage, aiResponse]);
+      // Lock the sliders and show the response
       setChatStarted(true);
+      
+      // Add AI response with typing effect after a brief delay
+      setTimeout(() => {
+        setMessages([{
+          type: 'ai',
+          content: `Wow — that automation would be worth $${totalValue.toLocaleString('en-US')} in annual value. What process did you have in mind?`,
+          isTyping: true
+        }]);
+      }, 300); // Small delay for smooth transition
+      
     } else if (inputText.trim()) {
       setMessages([...messages, { type: 'user', content: inputText }]);
       setInputText('');
@@ -114,11 +125,17 @@ const Home = () => {
     setHoursPerWeek(5);
     setEmployees(2);
     setAvgSalary(85000);
+    setShowArrow(false);
   };
   
   const salaryInThousands = Math.round(avgSalary / 1000);
-  const handleSalaryChange = (thousands) => {
+  
+  const handleSalaryChange = (value) => {
+    const thousands = value;
     setAvgSalary(thousands * 1000);
+    if (!chatStarted) {
+      setShowArrow(true);
+    }
   };
 
   // ============ PARTNERS CAROUSEL EFFECT ============
@@ -191,53 +208,59 @@ const Home = () => {
       {/* CHATBOX SECTION */}
       <section className="chatbox-section">
         <div className="chatbox-container">
+          {!chatStarted && (
+            <div className="chat-instruction">
+              **Adjust the sliders to calculate**
+            </div>
+          )}
           <div className={`chat-window ${chatStarted ? 'expanded' : ''}`}>
             <div className={`messages-area ${chatStarted ? 'expanded' : ''}`}>
-              {!chatStarted ? (
-                <div className="message ai-message pre-filled">
-                  <span className="message-label">AI:</span>
-                  <span className="message-content">
-                    Imagine automating a process that saves
-                    <Slider
-                      value={hoursPerWeek}
-                      onChange={setHoursPerWeek}
-                      min={0}
-                      max={10}
-                      step={0.5}
-                      width="100px"
-                      suffix="hours per week for"
-                    />
-                    <Slider
-                      value={employees}
-                      onChange={setEmployees}
-                      min={1}
-                      max={10}
-                      step={1}
-                      width="90px"
-                      suffix="employees who make about $"
-                    />
-                    <Slider
-                      value={salaryInThousands}
-                      onChange={handleSalaryChange}
-                      min={35}
-                      max={250}
-                      step={5}
-                      width="100px"
-                      displayValue={`${salaryInThousands}k`}
-                      suffix="per year."
-                    />
-                  </span>
+              {/* Initial message with sliders - always visible */}
+              <div className="message ai-message pre-filled">
+                <span className="message-label">AI:</span>
+                <span className="message-content">
+                  Imagine automating a process that saves
+                  <Slider
+                    value={hoursPerWeek}
+                    onChange={handleSliderChange(setHoursPerWeek)}
+                    min={0}
+                    max={10}
+                    step={1}
+                    width="100px"
+                    suffix="hours per week for"
+                    disabled={chatStarted}
+                  />
+                  <Slider
+                    value={employees}
+                    onChange={handleSliderChange(setEmployees)}
+                    min={1}
+                    max={100}
+                    step={1}
+                    width="90px"
+                    suffix="employees who make about $"
+                    disabled={chatStarted}
+                  />
+                  <Slider
+                    value={salaryInThousands}
+                    onChange={handleSalaryChange}
+                    min={35}
+                    max={250}
+                    step={5}
+                    width="100px"
+                    displayValue={`${salaryInThousands}k`}
+                    suffix="per year."
+                    disabled={chatStarted}
+                  />
+                </span>
+              </div>
+              
+              {/* New messages appear below */}
+              {messages.map((message, index) => (
+                <div key={index} className={`message ${message.type}-message ${message.isTyping ? 'typing' : ''}`}>
+                  <span className="message-label">{message.type === 'ai' ? 'AI:' : 'You:'}</span>
+                  <span className="message-content">{message.content}</span>
                 </div>
-              ) : (
-                <>
-                  {messages.map((message, index) => (
-                    <div key={index} className={`message ${message.type}-message`}>
-                      <span className="message-label">{message.type === 'ai' ? 'AI:' : 'You:'}</span>
-                      <span className="message-content">{message.content}</span>
-                    </div>
-                  ))}
-                </>
-              )}
+              ))}
             </div>
             
             <div className="chat-input-container">
@@ -255,6 +278,11 @@ const Home = () => {
                   <path d="M12 19V5M5 12l7-7 7 7" />
                 </svg>
               </button>
+              {showArrow && !chatStarted && (
+                <div className="send-arrow">
+                  →
+                </div>
+              )}
               {chatStarted && (
                 <button className="refresh-button" onClick={handleRefresh}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

@@ -21,6 +21,11 @@
   outline: none;
 }
 
+.inline-slider:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Track */
 .inline-slider::-webkit-slider-runnable-track {
   width: 100%;
@@ -79,6 +84,27 @@
 .inline-slider:hover::-moz-range-thumb {
   background: #d4a574;
   transform: scale(1.15);
+}
+
+/* Disabled state */
+.inline-slider:disabled::-webkit-slider-thumb {
+  cursor: not-allowed;
+  background: #8a8a8a;
+}
+
+.inline-slider:disabled::-moz-range-thumb {
+  cursor: not-allowed;
+  background: #8a8a8a;
+}
+
+.inline-slider:disabled:hover::-webkit-slider-thumb {
+  background: #8a8a8a;
+  transform: scale(1);
+}
+
+.inline-slider:disabled:hover::-moz-range-thumb {
+  background: #8a8a8a;
+  transform: scale(1);
 }
 
 /* Value display */

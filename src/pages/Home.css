@@ -95,6 +95,20 @@
 .chatbox-container {
   max-width: 800px;
   margin: 0 auto;
+  position: relative;
+}
+
+.chat-instruction {
+  position: absolute;
+  top: -16px;
+  right: 0;
+  font-family: 'Khand', sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  color: #1a1a1a;
+  letter-spacing: 0.02em;
+  z-index: 10;
+  pointer-events: none;
 }
 
 .chat-window {
@@ -105,6 +119,7 @@
   flex-direction: column;
   min-height: 160px;
   transition: min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
 .chat-window.expanded {
@@ -115,7 +130,7 @@
   flex: 1;
   padding: 24px 32px;
   overflow-y: auto;
-  transition: all 0.3s ease;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .messages-area.expanded {
@@ -128,17 +143,32 @@
   font-weight: 300;
   font-size: 18px;
   line-height: 1.5;
-  animation: fadeIn 0.3s ease;
 }
 
-@keyframes fadeIn {
+.message.typing {
+  animation: messageSlideIn 0.4s ease, typingFadeIn 0.6s ease;
+}
+
+@keyframes messageSlideIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes typingFadeIn {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 
@@ -167,12 +197,13 @@
 }
 
 .chat-input-container {
-  border-top: 1px solid #1a1a1a;
+  border-top: none;
   padding: 16px;
   display: flex;
   gap: 8px;
   align-items: center;
   background-color: transparent;
+  position: relative;
 }
 
 .chat-input {
@@ -224,6 +255,37 @@
   background-color: #d4a574;
   color: #ffffe2;
   border-color: #d4a574;
+}
+
+.send-arrow {
+  position: absolute;
+  right: 60px;
+  font-family: 'Khand', sans-serif;
+  font-size: 32px;
+  color: #d4a574;
+  animation: arrowSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards, arrowPulse 2s ease-in-out 0.4s infinite;
+  pointer-events: none;
+  line-height: 1;
+}
+
+@keyframes arrowSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes arrowPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* ============================================
@@ -465,6 +527,11 @@
     padding: 20px 20px 60px 20px;
   }
   
+  .chat-instruction {
+    font-size: 14px;
+    top: -28px;
+  }
+  
   .messages-area {
     padding: 20px;
   }
@@ -527,6 +594,11 @@
   }
   
   /* Chatbox responsive */
+  .chat-instruction {
+    font-size: 13px;
+    top: -26px;
+  }
+  
   .messages-area {
     padding: 16px;
   }
@@ -539,6 +611,11 @@
   .refresh-button {
     width: 32px;
     height: 32px;
+  }
+  
+  .send-arrow {
+    font-size: 28px;
+    right: 54px;
   }
   
   /* Partners responsive */

@@ -9,7 +9,8 @@ const Slider = ({
   step = 1,
   width = '100px',
   displayValue,
-  suffix = ''
+  suffix = '',
+  disabled = false
 }) => {
   const sliderRef = useRef(null);
   
@@ -34,7 +35,8 @@ const Slider = ({
           max={max}
           step={step}
           value={value}
-          onChange={(e) => onChange(Number(e.target.value))}
+          onChange={(e) => !disabled && onChange(Number(e.target.value))}
+          disabled={disabled}
         />
       </span>
       <span className="slider-display-value">{showValue}</span>
