@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Modal.css';
 
-const Modal = ({ isOpen, onClose }) => {
+const Modal = ({ isOpen, onClose, subtitle }) => {
   const [formData, setFormData] = useState({ name: '', email: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -40,6 +40,9 @@ const Modal = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
+  // Default subtitle if none provided
+  const displaySubtitle = subtitle || "Share your details and we'll reach out to schedule a discovery call.";
+
   return (
     <div className="modal-overlay" onClick={handleClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -49,7 +52,7 @@ const Modal = ({ isOpen, onClose }) => {
           <>
             <h2 className="modal-title">Let's Chat</h2>
             <p className="modal-subtitle">
-              Share your details and we'll reach out to schedule a discovery call.
+              {displaySubtitle}
             </p>
             
             <form onSubmit={handleFormSubmit} className="modal-form">
