@@ -382,10 +382,10 @@ const Home = () => {
       <section className="hero" ref={vantaRef}>
         <div className="hero-container">
           <h1 className="hero-headline">
-            Your Partner in Custom Automation.
+            Your Partner in Custom AI Automation.
           </h1>
           <p className="hero-subheadline">
-            We help you identify, design, and build tailored automations — blending AI, current software, and low-code tools into one cohesive system.
+            We help you identify, design, and build tailored automations — blending AI, current software, and low-code tools into cohesive systems.
           </p>
           <button className="hero-cta-button" onClick={() => openModal("Discover how custom automation can transform your operations.")}>
             See What's Possible
