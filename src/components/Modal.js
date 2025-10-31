@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import './Modal.css';
 
-const Modal = ({ isOpen, onClose, subtitle }) => {
+// Initialize Supabase
+const supabase = createClient(
+  process.env.REACT_APP_SUPABASE_URL,
+  process.env.REACT_APP_SUPABASE_KEY
+);
+
+const Modal = ({ isOpen, onClose, subtitle, conversationData }) => {
   const [formData, setFormData] = useState({ name: '', email: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -17,19 +24,35 @@ const Modal = ({ isOpen, onClose, subtitle }) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      // Save to Supabase
+      const { data, error } = await supabase
+        .from('contact_submissions')
+        .insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            conversation: conversationData?.messages || null,
+            automation_value: conversationData?.automationValue || null
+          }
+        ]);
 
-    // TODO: Later - send to Supabase
-    console.log('Form submitted:', formData);
-    
-    setIsSubmitting(false);
-    setSubmitSuccess(true);
+      if (error) throw error;
 
-    // Close modal after 2 seconds
-    setTimeout(() => {
-      handleClose();
-    }, 2000);
+      console.log('Saved to Supabase:', data);
+      
+      setIsSubmitting(false);
+      setSubmitSuccess(true);
+
+      // Close modal after 2 seconds
+      setTimeout(() => {
+        handleClose();
+      }, 2000);
+    } catch (error) {
+      console.error('Error saving to Supabase:', error);
+      setIsSubmitting(false);
+      alert('Error submitting form. Please try again.');
+    }
   };
 
   const handleClose = () => {
@@ -40,7 +63,6 @@ const Modal = ({ isOpen, onClose, subtitle }) => {
 
   if (!isOpen) return null;
 
-  // Default subtitle if none provided
   const displaySubtitle = subtitle || "Share your details and we'll reach out to schedule a discovery call.";
 
   return (

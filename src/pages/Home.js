@@ -538,10 +538,14 @@ const Home = () => {
 
       {/* REUSABLE MODAL */}
       <Modal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        subtitle={modalSubtitle}
-      />
+      isOpen={isModalOpen}
+      onClose={() => setIsModalOpen(false)}
+      subtitle={modalSubtitle}
+      conversationData={{
+      messages: messages,
+      automationValue: chatStarted ? Math.round((hoursPerWeek * 52 * employees * (avgSalary / 2080))) : null
+      }}
+    />
     </div>
   );
 };
