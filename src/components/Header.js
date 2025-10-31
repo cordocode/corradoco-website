@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
 import logo from '../assets/LOGO_BLACK_TRANSPARENT_CORRADO_CO.svg';
 
 function Header() {
-  const navigate = useNavigate();
-  const location = useLocation();
   const [currentPage, setCurrentPage] = useState('home');
   const [animatingTo, setAnimatingTo] = useState(null);
   const [animatingFrom, setAnimatingFrom] = useState(null);
 
   useEffect(() => {
     // Determine current page from pathname
-    const path = location.pathname;
+    const path = window.location.pathname;
     if (path === '/') setCurrentPage('home');
-    else if (path.includes('about')) setCurrentPage('about');
     else if (path.includes('services')) setCurrentPage('services');
     else if (path.includes('blog')) setCurrentPage('blog');
-  }, [location.pathname]);
+  }, []);
 
-  const handleLinkClick = (e, linkName, path) => {
+  const handleLinkClick = (e, linkName) => {
     if (linkName === currentPage) {
       e.preventDefault();
       return; // Don't re-animate if already on the page
@@ -36,7 +32,7 @@ function Header() {
       setCurrentPage(linkName);
       setAnimatingFrom(null);
       setAnimatingTo(null);
-      navigate(path);
+      window.location.href = e.target.href;
     }, 250);
   };
 
@@ -74,7 +70,7 @@ function Header() {
           <a 
             href="/" 
             className={getNavClass('home')}
-            onClick={(e) => handleLinkClick(e, 'home', '/')}
+            onClick={(e) => handleLinkClick(e, 'home')}
           >
             <span className="nav-text">Home</span>
             <div className="nav-fill"></div>
@@ -83,20 +79,9 @@ function Header() {
         
         <div className="header-section header-nav-section">
           <a 
-            href="/about" 
-            className={getNavClass('about')}
-            onClick={(e) => handleLinkClick(e, 'about', '/about')}
-          >
-            <span className="nav-text">About</span>
-            <div className="nav-fill"></div>
-          </a>
-        </div>
-        
-        <div className="header-section header-nav-section">
-          <a 
             href="/services" 
             className={getNavClass('services')}
-            onClick={(e) => handleLinkClick(e, 'services', '/services')}
+            onClick={(e) => handleLinkClick(e, 'services')}
           >
             <span className="nav-text">Services</span>
             <div className="nav-fill"></div>
@@ -107,7 +92,7 @@ function Header() {
           <a 
             href="/blog" 
             className={getNavClass('blog')}
-            onClick={(e) => handleLinkClick(e, 'blog', '/blog')}
+            onClick={(e) => handleLinkClick(e, 'blog')}
           >
             <span className="nav-text">Blog</span>
             <div className="nav-fill"></div>
