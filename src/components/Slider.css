@@ -115,6 +115,7 @@
   color: #d4a574;
   white-space: nowrap;
   margin-left: 4px;
+  transition: color 0.3s ease;
 }
 
 .slider-suffix {
@@ -123,4 +124,5 @@
   font-size: 18px;
   color: #8a8a8a;
   margin-left: 4px;
+  transition: color 0.3s ease;
 }
