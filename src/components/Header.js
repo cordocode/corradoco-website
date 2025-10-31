@@ -33,7 +33,7 @@ function Header() {
       setCurrentPage(linkName);
       setAnimatingFrom(null);
       setAnimatingTo(null);
-      window.location.href = e.target.href;
+      window.location.href = e.currentTarget.href;
     }, 250);
   };
 
