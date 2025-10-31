@@ -1,0 +1,370 @@
+.flow {
+  min-height: 100vh;
+  background-color: #ffffe2;
+  position: relative;
+}
+
+.flow-content {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  position: relative;
+  background-color: #ffffe2;
+  z-index: 1;
+}
+
+.flow-net-background {
+  position: absolute;
+  right: 100px;
+  top: 0;
+  width: 450px;
+  min-height: 100%;
+  z-index: 0;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.flow-net-background canvas {
+  opacity: 0.8 !important;
+}
+
+.flow-net-background::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 180px;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 226, 0.95) 0%,
+    rgba(255, 255, 226, 0.85) 15%,
+    rgba(255, 255, 226, 0.7) 30%,
+    rgba(255, 255, 226, 0.5) 45%,
+    rgba(255, 255, 226, 0.3) 60%,
+    rgba(255, 255, 226, 0.15) 75%,
+    rgba(255, 255, 226, 0.05) 90%,
+    rgba(255, 255, 226, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.flow-timeline-wrapper {
+  flex: 1;
+  margin-right: 550px;
+  margin-left: 100px;
+  padding: 80px 40px 80px 40px;
+  position: relative;
+  z-index: 2;
+  background-color: rgba(255, 255, 226, 0.7);
+}
+
+.flow-timeline-container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.timeline-track {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 24px;
+  position: relative;
+}
+
+.timeline-node {
+  flex: 0 0 55px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.node-circle {
+  width: 55px;
+  height: 55px;
+  border: 2px solid #1a1a1a;
+  border-radius: 50%;
+  background-color: #ffffe2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.timeline-item.expanded .node-circle {
+  background-color: #1a1a1a;
+  transform: scale(1.1);
+}
+
+.timeline-item.visited .node-circle {
+  border-color: #d4a574;
+}
+
+.node-number {
+  font-family: 'Khand', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #1a1a1a;
+  transition: color 0.3s ease;
+}
+
+.timeline-item.expanded .node-number {
+  color: #ffffe2;
+}
+
+.timeline-item.visited .node-number {
+  color: #d4a574;
+}
+
+.timeline-item.expanded.visited .node-number {
+  color: #ffffe2;
+}
+
+.node-line {
+  width: 2px;
+  flex: 1;
+  background-color: #d4d4d4;
+  margin-top: -2px;
+  transition: background-color 0.3s ease;
+}
+
+.timeline-item.expanded .node-line {
+  background-color: #d4a574;
+}
+
+.timeline-item.visited .node-line {
+  background-color: #d4a574;
+}
+
+.timeline-content {
+  flex: 1;
+  padding-bottom: 40px;
+}
+
+.timeline-item:last-child .timeline-content {
+  padding-bottom: 0;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+  padding: 16px 0;
+  transition: all 0.3s ease;
+}
+
+.timeline-header:hover {
+  transform: translateX(4px);
+}
+
+.timeline-header-text {
+  flex: 1;
+}
+
+.timeline-title {
+  font-family: 'Khand', sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  transition: color 0.3s ease;
+}
+
+.timeline-header:hover .timeline-title {
+  color: #d4a574;
+}
+
+.timeline-subtitle {
+  font-family: 'Array', sans-serif;
+  font-size: 14px;
+  color: #6a6a6a;
+  line-height: 1.4;
+}
+
+.timeline-toggle {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #1a1a1a;
+  background-color: transparent;
+  color: #1a1a1a;
+  font-size: 28px;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  font-family: 'Array', sans-serif;
+  line-height: 1;
+  padding-bottom: 2px;
+}
+
+.timeline-toggle:hover {
+  background-color: #1a1a1a;
+  color: #ffffe2;
+}
+
+.timeline-item.expanded .timeline-toggle {
+  background-color: #d4a574;
+  border-color: #d4a574;
+  color: #ffffe2;
+}
+
+.timeline-description {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.4s ease,
+              margin-top 0.4s ease;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.timeline-item.expanded .timeline-description {
+  max-height: 300px;
+  opacity: 1;
+  margin-top: 20px;
+}
+
+.timeline-description p {
+  font-family: 'Khand', sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: #4a4a4a;
+  padding: 20px;
+  background-color: rgba(212, 165, 116, 0.05);
+  border-left: 2px solid #d4a574;
+}
+
+@media (max-width: 1024px) {
+  .flow-net-background {
+    width: 350px;
+    right: 60px;
+  }
+
+  .flow-timeline-wrapper {
+    margin-right: 410px;
+    padding: 60px 40px 60px 40px;
+    background-color: rgba(255, 255, 226, 0.8);
+  }
+  
+  .flow-net-background::before {
+    width: 140px;
+  }
+}
+
+@media (max-width: 768px) {
+  .flow-net-background {
+    display: none;
+  }
+
+  .flow-timeline-wrapper {
+    margin-right: 0;
+    margin-left: 0;
+    padding: 60px 20px;
+    background-color: #ffffe2;
+  }
+
+  .timeline-item {
+    gap: 24px;
+  }
+
+  .timeline-node {
+    flex: 0 0 60px;
+  }
+
+  .node-circle {
+    width: 60px;
+    height: 60px;
+  }
+
+  .node-number {
+    font-size: 22px;
+  }
+
+  .timeline-content {
+    padding-bottom: 50px;
+  }
+
+  .timeline-title {
+    font-size: 28px;
+  }
+
+  .timeline-subtitle {
+    font-size: 15px;
+  }
+  
+  .timeline-header {
+    gap: 12px;
+  }
+
+  .timeline-toggle {
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+  }
+
+  .timeline-description p {
+    font-size: 18px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .flow-timeline-wrapper {
+    padding: 50px 20px;
+  }
+
+  .timeline-item {
+    gap: 16px;
+  }
+
+  .timeline-node {
+    flex: 0 0 50px;
+  }
+
+  .node-circle {
+    width: 50px;
+    height: 50px;
+  }
+
+  .node-number {
+    font-size: 18px;
+  }
+
+  .timeline-title {
+    font-size: 24px;
+  }
+
+  .timeline-subtitle {
+    font-size: 14px;
+  }
+
+  .timeline-toggle {
+    width: 32px;
+    height: 32px;
+    font-size: 22px;
+  }
+
+  .timeline-description p {
+    font-size: 17px;
+    padding: 16px;
+  }
+
+  .timeline-header {
+    padding: 16px 0;
+  }
+}
