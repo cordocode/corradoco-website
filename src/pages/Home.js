@@ -156,7 +156,11 @@ const Home = () => {
       }]);
 
       // Call the streaming API
-      const response = await fetch('/api/chat', {
+      const apiUrl = process.env.NODE_ENV === 'production' 
+        ? '/api/chat' 
+        : 'http://localhost:5001/api/chat';
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -197,14 +201,18 @@ const Home = () => {
             try {
               const parsed = JSON.parse(data);
               if (parsed.content) {
-                aiResponse += parsed.content;
+                const contentToAdd = parsed.content;
+                aiResponse += contentToAdd;
                 
                 // Update the message by ID
-                setMessages(prev => prev.map(msg => 
-                  msg.id === aiMessageId 
-                    ? { ...msg, content: aiResponse, isTyping: true }
-                    : msg
-                ));
+                setMessages(prev => {
+                  const currentResponse = aiResponse;
+                  return prev.map(msg => 
+                    msg.id === aiMessageId 
+                      ? { ...msg, content: currentResponse, isTyping: true }
+                      : msg
+                  );
+                });
               }
             } catch (e) {
               // Ignore parse errors
@@ -245,10 +253,6 @@ const Home = () => {
   };
 
   // ============ CHATBOX FUNCTIONS ============
-  const formatSalary = (value) => {
-    return value.toLocaleString('en-US');
-  };
-  
   const handleSliderChange = (setter) => (value) => {
     setter(value);
     if (!chatStarted) {
@@ -538,14 +542,14 @@ const Home = () => {
 
       {/* REUSABLE MODAL */}
       <Modal 
-      isOpen={isModalOpen}
-      onClose={() => setIsModalOpen(false)}
-      subtitle={modalSubtitle}
-      conversationData={{
-      messages: messages,
-      automationValue: chatStarted ? Math.round((hoursPerWeek * 52 * employees * (avgSalary / 2080))) : null
-      }}
-    />
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        subtitle={modalSubtitle}
+        conversationData={{
+          messages: messages,
+          automationValue: chatStarted ? Math.round((hoursPerWeek * 52 * employees * (avgSalary / 2080))) : null
+        }}
+      />
     </div>
   );
 };
