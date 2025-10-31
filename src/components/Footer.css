@@ -2,6 +2,8 @@
   background-color: #ffffe2;
   border-top: 1px solid #1a1a1a;
   margin-top: 60px;
+  position: relative;
+  z-index: 100; /* ADDED: Ensures footer stays on top of NET animation */
 }
 
 /* CTA Section */

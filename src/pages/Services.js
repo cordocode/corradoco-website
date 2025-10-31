@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Services.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+// NOTE: Vanta.js NET and Three.js loaded via CDN in index.html
 
 const Services = () => {
   const [expandedPhase, setExpandedPhase] = useState(null);
+  const [visitedPhases, setVisitedPhases] = useState(new Set());
+  const [vantaEffect, setVantaEffect] = useState(null);
+  const vantaRef = useRef(null);
 
   const phases = [
     {
@@ -44,7 +48,59 @@ const Services = () => {
     }
   ];
 
+  // Initialize Vanta NET effect
+  useEffect(() => {
+    if (!vantaEffect && window.THREE && window.VANTA) {
+      setVantaEffect(
+        window.VANTA.NET({
+          el: vantaRef.current,
+          THREE: window.THREE,
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          scale: 1.00,
+          scaleMobile: 1.00,
+          color: 0x1a1a1a, // Changed to charcoal
+          backgroundColor: 0xffffe2,
+          points: 2.00,
+          maxDistance: 15.00,
+          spacing: 18.00
+        })
+      );
+    }
+    return () => {
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, [vantaEffect]);
+
+  // Update NET effect based on progression
+  useEffect(() => {
+    if (vantaEffect) {
+      const progressionLevel = visitedPhases.size;
+      
+      // Calculate points and maxDistance based on progression
+      // 2X MORE DRAMATIC GROWTH
+      // Start: 2 points, 15 distance
+      // End (5 phases): 18 points, 39 distance
+      const points = 2 + (progressionLevel * 3.2); // 2 → 18 (doubled from 1.6)
+      const maxDistance = 15 + (progressionLevel * 4.8); // 15 → 39 (doubled from 2.4)
+      
+      vantaEffect.setOptions({
+        points: points,
+        maxDistance: maxDistance
+      });
+    }
+  }, [visitedPhases, vantaEffect]);
+
   const togglePhase = (phaseId) => {
+    // Add to visited phases if not already there
+    if (!visitedPhases.has(phaseId)) {
+      setVisitedPhases(new Set([...visitedPhases, phaseId]));
+    }
+    
+    // Toggle expansion
     setExpandedPhase(expandedPhase === phaseId ? null : phaseId);
   };
 
@@ -52,55 +108,51 @@ const Services = () => {
     <div className="services">
       <Header />
       
-      {/* Hero Section */}
-      <section className="services-hero">
-        <div className="services-hero-container">
-          <h1 className="services-hero-title">Our Process</h1>
-          <p className="services-hero-subtitle">
-            A proven roadmap for implementing custom AI automation that delivers real value.
-          </p>
-        </div>
-      </section>
-
-      {/* Timeline Section */}
-      <section className="services-timeline">
-        <div className="services-timeline-container">
-          <div className="timeline-track">
-            {phases.map((phase, index) => (
-              <div 
-                key={phase.id} 
-                className={`timeline-item ${expandedPhase === phase.id ? 'expanded' : ''}`}
-              >
-                {/* Timeline Node */}
-                <div className="timeline-node">
-                  <div className="node-circle">
-                    <span className="node-number">{phase.number}</span>
-                  </div>
-                  {index < phases.length - 1 && <div className="node-line"></div>}
-                </div>
-
-                {/* Timeline Content */}
-                <div className="timeline-content">
-                  <div 
-                    className="timeline-header"
-                    onClick={() => togglePhase(phase.id)}
-                  >
-                    <div className="timeline-header-text">
-                      <h3 className="timeline-title">{phase.title}</h3>
-                      <p className="timeline-subtitle">{phase.subtitle}</p>
+      {/* Services Content with NET background */}
+      <section className="services-content">
+        {/* Vanta NET Animation */}
+        <div className="services-net-background" ref={vantaRef}></div>
+        
+        {/* Timeline Section */}
+        <div className="services-timeline-wrapper">
+          <div className="services-timeline-container">
+            <div className="timeline-track">
+              {phases.map((phase, index) => (
+                <div 
+                  key={phase.id} 
+                  className={`timeline-item ${expandedPhase === phase.id ? 'expanded' : ''} ${visitedPhases.has(phase.id) ? 'visited' : ''}`}
+                >
+                  {/* Timeline Node */}
+                  <div className="timeline-node">
+                    <div className="node-circle">
+                      <span className="node-number">{phase.number}</span>
                     </div>
-                    <button className="timeline-toggle">
-                      {expandedPhase === phase.id ? '−' : '+'}
-                    </button>
+                    {index < phases.length - 1 && <div className="node-line"></div>}
                   </div>
 
-                  {/* Expanded Description */}
-                  <div className="timeline-description">
-                    <p>{phase.description}</p>
+                  {/* Timeline Content */}
+                  <div className="timeline-content">
+                    <div 
+                      className="timeline-header"
+                      onClick={() => togglePhase(phase.id)}
+                    >
+                      <div className="timeline-header-text">
+                        <h3 className="timeline-title">{phase.title}</h3>
+                        <p className="timeline-subtitle">{phase.subtitle}</p>
+                      </div>
+                      <button className="timeline-toggle">
+                        {expandedPhase === phase.id ? '−' : '+'}
+                      </button>
+                    </div>
+
+                    {/* Expanded Description */}
+                    <div className="timeline-description">
+                      <p>{phase.description}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>

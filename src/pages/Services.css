@@ -1,53 +1,49 @@
 .services {
   min-height: 100vh;
   background-color: #ffffe2;
+  position: relative;
 }
 
 /* ============================================
-   HERO SECTION
+   SERVICES CONTENT WITH NET BACKGROUND
    ============================================ */
-.services-hero {
-  padding: 80px 20px 60px;
+.services-content {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  position: relative;
   background-color: #ffffe2;
-  border-bottom: 1px solid #d4d4d4;
+  z-index: 1;
 }
 
-.services-hero-container {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
+/* Vanta NET Background - Vertical Rectangle on Right */
+.services-net-background {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 400px;
+  min-height: 100%;
+  z-index: 0;
+  opacity: 0.6; /* Increased from 0.3 */
+  pointer-events: none;
 }
 
-.services-hero-title {
-  font-family: 'Khand', sans-serif;
-  font-weight: 400;
-  font-size: 64px;
-  line-height: 1.1;
-  color: #1a1a1a;
-  margin-bottom: 24px;
-  letter-spacing: 0.02em;
+.services-net-background canvas {
+  opacity: 0.8 !important; /* Increased from 0.6 */
 }
 
-.services-hero-subtitle {
-  font-family: 'Array', sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 1.6;
-  color: #4a4a4a;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/* ============================================
-   TIMELINE SECTION
-   ============================================ */
-.services-timeline {
-  padding: 80px 20px;
-  background-color: #ffffe2;
+/* Timeline Wrapper - Pushed Left */
+.services-timeline-wrapper {
+  flex: 1;
+  margin-right: 400px;
+  margin-left: 100px; /* Added left margin for breathing room */
+  padding: 80px 60px 80px 40px; /* Reduced left padding */
+  position: relative;
+  z-index: 2;
+  background-color: rgba(255, 255, 226, 0.7);
 }
 
 .services-timeline-container {
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -62,7 +58,7 @@
    ============================================ */
 .timeline-item {
   display: flex;
-  gap: 40px;
+  gap: 32px; /* Reduced from 40px */
   position: relative;
 }
 
@@ -70,7 +66,7 @@
    TIMELINE NODE (Left Side)
    ============================================ */
 .timeline-node {
-  flex: 0 0 80px;
+  flex: 0 0 55px; /* Reduced from 70px */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -78,8 +74,8 @@
 }
 
 .node-circle {
-  width: 80px;
-  height: 80px;
+  width: 55px; /* Reduced from 70px */
+  height: 55px;
   border: 2px solid #1a1a1a;
   border-radius: 50%;
   background-color: #ffffe2;
@@ -96,15 +92,27 @@
   transform: scale(1.1);
 }
 
+.timeline-item.visited .node-circle {
+  border-color: #d4a574;
+}
+
 .node-number {
   font-family: 'Khand', sans-serif;
-  font-size: 28px;
+  font-size: 20px; /* Reduced from 24px */
   font-weight: 400;
   color: #1a1a1a;
   transition: color 0.3s ease;
 }
 
 .timeline-item.expanded .node-number {
+  color: #ffffe2;
+}
+
+.timeline-item.visited .node-number {
+  color: #d4a574;
+}
+
+.timeline-item.expanded.visited .node-number {
   color: #ffffe2;
 }
 
@@ -120,12 +128,16 @@
   background-color: #d4a574;
 }
 
+.timeline-item.visited .node-line {
+  background-color: #d4a574;
+}
+
 /* ============================================
    TIMELINE CONTENT (Right Side)
    ============================================ */
 .timeline-content {
   flex: 1;
-  padding-bottom: 60px;
+  padding-bottom: 50px; /* Reduced from 60px */
 }
 
 .timeline-item:last-child .timeline-content {
@@ -136,9 +148,9 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 20px;
+  gap: 16px; /* Reduced from 20px */
   cursor: pointer;
-  padding: 20px 0;
+  padding: 16px 0; /* Reduced from 20px */
   transition: all 0.3s ease;
 }
 
@@ -152,7 +164,7 @@
 
 .timeline-title {
   font-family: 'Khand', sans-serif;
-  font-size: 36px;
+  font-size: 28px; /* Reduced from 32px */
   font-weight: 400;
   color: #1a1a1a;
   margin-bottom: 8px;
@@ -167,7 +179,7 @@
 
 .timeline-subtitle {
   font-family: 'Array', sans-serif;
-  font-size: 16px;
+  font-size: 14px; /* Reduced from 16px */
   color: #6a6a6a;
   line-height: 1.4;
 }
@@ -223,11 +235,11 @@
 
 .timeline-description p {
   font-family: 'Khand', sans-serif;
-  font-size: 20px;
+  font-size: 18px; /* Reduced from 20px */
   font-weight: 300;
   line-height: 1.7;
   color: #4a4a4a;
-  padding: 24px;
+  padding: 20px; /* Reduced from 24px */
   background-color: rgba(212, 165, 116, 0.05);
   border-left: 2px solid #d4a574;
 }
@@ -235,21 +247,30 @@
 /* ============================================
    RESPONSIVE DESIGN
    ============================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .services-net-background {
+    width: 300px;
+  }
+
+  .services-timeline-wrapper {
+    margin-right: 300px;
+    padding: 60px 60px 60px 40px;
+    background-color: rgba(255, 255, 226, 0.8);
+  }
+}
+
+/* Mobile - Hide NET background, center timeline */
 @media (max-width: 768px) {
-  .services-hero {
-    padding: 60px 20px 40px;
+  .services-net-background {
+    display: none;
   }
 
-  .services-hero-title {
-    font-size: 42px;
-  }
-
-  .services-hero-subtitle {
-    font-size: 18px;
-  }
-
-  .services-timeline {
+  .services-timeline-wrapper {
+    margin-right: 0;
     padding: 60px 20px;
+    background-color: #ffffe2;
   }
 
   .timeline-item {
@@ -294,12 +315,8 @@
 }
 
 @media (max-width: 480px) {
-  .services-hero-title {
-    font-size: 36px;
-  }
-
-  .services-hero-subtitle {
-    font-size: 16px;
+  .services-timeline-wrapper {
+    padding: 50px 20px;
   }
 
   .timeline-item {

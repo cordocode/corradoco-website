@@ -5,6 +5,7 @@
   position: relative;
   /* Single continuous bottom border for entire header - now dark charcoal */
   border-bottom: 1px solid #1a1a1a;
+  z-index: 100; /* ADDED: Ensures header stays on top of NET animation */
 }
 
 .header-container {
