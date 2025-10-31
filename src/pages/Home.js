@@ -176,7 +176,7 @@ const Home = () => {
         throw new Error('API request failed');
       }
 
-      // Read the streaming response
+            // Read the streaming response
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let aiResponse = '';
@@ -189,6 +189,7 @@ const Home = () => {
         const chunk = decoder.decode(value);
         const lines = chunk.split('\n');
         
+        // eslint-disable-next-line no-loop-func
         for (const line of lines) {
           if (line.startsWith('data: ')) {
             const data = line.slice(6);
