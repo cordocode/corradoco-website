@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import './Blog.css';
 import Header from '../components/Header';
@@ -24,23 +24,7 @@ const Blog = () => {
     published: false
   });
 
-  useEffect(() => {
-    // Check if admin mode requested via URL
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('admin') === 'true' && !isAdmin) {
-      setShowPasswordPrompt(true);
-    }
-    
-    // Check if already authenticated (session storage)
-    const adminAuth = sessionStorage.getItem('blog_admin_auth');
-    if (adminAuth === 'true') {
-      setIsAdmin(true);
-    }
-    
-    fetchPosts();
-  }, [isAdmin]);
-
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
       let query = supabase
         .from('blog_posts')
@@ -62,7 +46,23 @@ const Blog = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [isAdmin]);
+
+  useEffect(() => {
+    // Check if admin mode requested via URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') === 'true' && !isAdmin) {
+      setShowPasswordPrompt(true);
+    }
+    
+    // Check if already authenticated (session storage)
+    const adminAuth = sessionStorage.getItem('blog_admin_auth');
+    if (adminAuth === 'true') {
+      setIsAdmin(true);
+    }
+    
+    fetchPosts();
+  }, [isAdmin, fetchPosts]);
 
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
