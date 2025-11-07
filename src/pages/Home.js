@@ -394,15 +394,20 @@ const Home = () => {
       </section>
 
       {/* CHATBOX SECTION */}
-      <section className="chatbox-section">
+      <section className={`chatbox-section ${chatStarted ? 'expanded' : ''}`}>
         <div className="chatbox-container">
-          {!chatStarted && (
-            <div className="chat-instruction">
-              **Adjust the sliders to calculate**
-            </div>
-          )}
-          <div className={`chat-window ${chatStarted ? 'expanded' : ''}`}>
-            <div className={`messages-area ${chatStarted ? 'expanded' : ''}`}>
+          <div className="chatbox-header">
+            <h2 className="chatbox-title">Unlock Your Team's Potential</h2>
+            <p className="chatbox-subtitle">Use our interactive tool to see the annual value hidden in your manual processes</p>
+          </div>
+          <div className="chat-window-wrapper">
+            {!chatStarted && (
+              <div className="chat-instruction">
+                **Adjust the sliders to calculate**
+              </div>
+            )}
+            <div className={`chat-window ${chatStarted ? 'expanded' : ''}`}>
+              <div className={`messages-area ${chatStarted ? 'expanded' : ''}`}>
               {/* Initial message with sliders - always visible */}
               <div className="message ai-message pre-filled">
                 <span className="message-label">AI:</span>
@@ -490,6 +495,7 @@ const Home = () => {
                   </svg>
                 </button>
               )}
+            </div>
             </div>
           </div>
         </div>
