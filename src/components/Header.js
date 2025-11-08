@@ -64,9 +64,13 @@ function Header() {
     <header className="header">
       <div className="header-container">
         <div className="header-section header-logo-section">
-          <div className="logo-link">
+          <a 
+            href="/"
+            className="logo-link"
+            onClick={(e) => handleLinkClick(e, 'home', '/')}
+          >
             <img src={logo} alt="Corrado & Co." className="logo" />
-          </div>
+          </a>
         </div>
         
         <div className="header-section header-nav-section">

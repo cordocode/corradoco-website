@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import './Flow.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Modal from '../components/Modal';
 
 const Flow = () => {
   const [expandedPhase, setExpandedPhase] = useState(null);
   const [visitedPhases, setVisitedPhases] = useState(new Set());
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const phases = [
     {
@@ -113,7 +115,26 @@ const Flow = () => {
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className="flow-cta">
+        <div className="flow-cta-container">
+          <h2 className="flow-cta-title">Let's Start With Step 1!</h2>
+          <p className="flow-cta-subtitle">
+            Free discovery call to identify which manual process you could automate.
+          </p>
+          <button className="flow-cta-button" onClick={() => setIsModalOpen(true)}>
+            Book Your Strategy Call
+          </button>
+        </div>
+      </section>
+
       <Footer />
+
+      <Modal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        subtitle="Free discovery call to identify which manual process you could automate."
+      />
     </div>
   );
 };

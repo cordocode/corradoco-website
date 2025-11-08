@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import './Blog.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Modal from '../components/Modal';
 
 // Initialize Supabase
 const supabase = createClient(
@@ -20,6 +21,7 @@ const Blog = () => {
   const [editingPost, setEditingPost] = useState(null);
   const [creatingNew, setCreatingNew] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -255,7 +257,26 @@ const Blog = () => {
           </div>
         </section>
 
+        {/* CTA Section */}
+        <section className="blog-cta">
+          <div className="blog-cta-container">
+            <h2 className="blog-cta-title">Ready to Reclaim Your Team's Time?</h2>
+            <p className="blog-cta-subtitle">
+              See how automation works in your specific business. Free process audit included.
+            </p>
+            <button className="blog-cta-button" onClick={() => setIsModalOpen(true)}>
+              Book Your Discovery Call
+            </button>
+          </div>
+        </section>
+
         <Footer />
+
+        <Modal 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          subtitle="See how automation works in your specific business. Free process audit included."
+        />
       </div>
     );
   }
@@ -318,7 +339,26 @@ const Blog = () => {
           </div>
         </section>
 
+        {/* CTA Section */}
+        <section className="blog-cta">
+          <div className="blog-cta-container">
+            <h2 className="blog-cta-title">Ready to Reclaim Your Team's Time?</h2>
+            <p className="blog-cta-subtitle">
+              See how automation works in your specific business. Free process audit included.
+            </p>
+            <button className="blog-cta-button" onClick={() => setIsModalOpen(true)}>
+              Book Your Discovery Call
+            </button>
+          </div>
+        </section>
+
         <Footer />
+
+        <Modal 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          subtitle="See how automation works in your specific business. Free process audit included."
+        />
       </div>
     );
   }
@@ -502,7 +542,26 @@ const Blog = () => {
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className="blog-cta">
+        <div className="blog-cta-container">
+          <h2 className="blog-cta-title">Ready to Reclaim Your Team's Time?</h2>
+          <p className="blog-cta-subtitle">
+            See how automation works in your specific business. Free process audit included.
+          </p>
+          <button className="blog-cta-button" onClick={() => setIsModalOpen(true)}>
+            Book Your Discovery Call
+          </button>
+        </div>
+      </section>
+
       <Footer />
+
+      <Modal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        subtitle="See how automation works in your specific business. Free process audit included."
+      />
     </div>
   );
 };
