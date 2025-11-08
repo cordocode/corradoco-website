@@ -191,7 +191,7 @@ const Blog = () => {
   };
 
   const createExcerpt = (content, maxLength = 150) => {
-    const plainText = content.replace(/[#*\-\[\]]/g, '').replace(/\n/g, ' ').trim();
+    const plainText = content.replace(/[#*\-[\]]/g, '').replace(/\n/g, ' ').trim();
     if (plainText.length <= maxLength) return plainText;
     return plainText.substring(0, maxLength) + '...';
   };
@@ -208,8 +208,8 @@ const Blog = () => {
 
   // Custom markdown components for styling
   const markdownComponents = {
-    h2: ({node, ...props}) => <h2 style={{fontFamily: 'Khand, sans-serif', fontSize: '36px', fontWeight: '400', marginTop: '48px', marginBottom: '24px', letterSpacing: '0.02em'}} {...props} />,
-    h3: ({node, ...props}) => <h3 style={{fontFamily: 'Khand, sans-serif', fontSize: '28px', fontWeight: '400', marginTop: '36px', marginBottom: '20px', letterSpacing: '0.02em'}} {...props} />,
+    h2: ({node, children, ...props}) => <h2 style={{fontFamily: 'Khand, sans-serif', fontSize: '36px', fontWeight: '400', marginTop: '48px', marginBottom: '24px', letterSpacing: '0.02em'}} {...props}>{children}</h2>,
+    h3: ({node, children, ...props}) => <h3 style={{fontFamily: 'Khand, sans-serif', fontSize: '28px', fontWeight: '400', marginTop: '36px', marginBottom: '20px', letterSpacing: '0.02em'}} {...props}>{children}</h3>,
     p: ({node, ...props}) => <p style={{marginBottom: '24px', lineHeight: '1.5'}} {...props} />,
     ul: ({node, ...props}) => <ul style={{marginLeft: '24px', marginBottom: '24px'}} {...props} />,
     ol: ({node, ...props}) => <ol style={{marginLeft: '24px', marginBottom: '24px'}} {...props} />,
