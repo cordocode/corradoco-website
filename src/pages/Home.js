@@ -101,36 +101,36 @@ const Home = () => {
     {
       id: 1,
       icon: iconInternalKnowledge,
-      title: 'Internal Knowledge Assistant',
-      tagline: 'Your company\'s expertise, instantly accessible',
+      title: 'Internal LLM',
+      tagline: 'ChatGPT fine-tuned and trained on your company\'s knowledge',
       illustration: illustrationInternalKnowledge
     },
     {
       id: 2,
       icon: iconCustomerPortal,
-      title: 'Customer Self-Service Portal',
-      tagline: 'Let customers get answers without calling',
+      title: 'External LLM',
+      tagline: 'Modern LLM that delivers useful answers to your customers',
       illustration: illustrationCustomerPortal
     },
     {
       id: 3,
       icon: iconDocumentIntelligence,
-      title: 'Document Intelligence',
-      tagline: 'Files that organize and route themselves',
+      title: 'Document Organization',
+      tagline: 'Rename and store files automatically and consistently',
       illustration: illustrationDocumentIntelligence
     },
     {
       id: 4,
       icon: iconDataBridge,
       title: 'Data Bridge Automation',
-      tagline: 'Information flows between systems automatically',
+      tagline: 'Extract information from one document and store it in another software automatically',
       illustration: illustrationDataBridge
     },
     {
       id: 5,
       icon: iconIntelligentDoc,
       title: 'Intelligent Document Processing',
-      tagline: 'AI reads your technical documents',
+      tagline: 'AI analysis of large and complex documents for quick and reliable answers',
       illustration: illustrationIntelligentDoc
     },
     {
@@ -422,7 +422,7 @@ const Home = () => {
             Your Partner in Custom AI Automation.
           </h1>
           <p className="hero-subheadline">
-            We help you identify, design, and build tailored automations — blending AI, current software, and low-code tools into cohesive systems.
+            We help you identify, design, and build tailored automations — blending AI, current software, and low-code tools into value adding solutions.
           </p>
           <button className="hero-cta-button" onClick={() => openModal("Discover how custom automation can transform your operations.")}>
             See What's Possible
@@ -540,8 +540,8 @@ const Home = () => {
       <section className="ai-integration">
         <div className="ai-integration-container">
           <div className="ai-integration-header">
-            <h2 className="ai-integration-title">What Does "AI Integration" Even Mean?</h2>
-            <p className="ai-integration-subtitle">Less buzzword, more workflow. Six areas where automation delivers:</p>
+            <h2 className="ai-integration-title">Where to get started with AI</h2>
+            <p className="ai-integration-subtitle">Six areas where automation actually delivers</p>
           </div>
 
           <div className="ai-integration-grid">
@@ -565,6 +565,21 @@ const Home = () => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* CTA SECTION */}
+      <section className="home-cta">
+        <div className="home-cta-container">
+          <h2 className="home-cta-title">
+            Watch It Work Before You Pay
+          </h2>
+          <p className="home-cta-subtitle">
+            Free process audit + proof-of-concept automation. See real results in your business first.
+          </p>
+          <button className="home-cta-button" onClick={() => openModal("Let's schedule your free process audit and proof-of-concept automation.")}>
+            Book Your Free Process Audit
+          </button>
         </div>
       </section>
 
@@ -598,18 +613,6 @@ const Home = () => {
           <div className="partner-descriptions">
             {/* TODO: Add partner descriptions */}
           </div>
-        </div>
-      </section>
-
-      {/* CTA SECTION */}
-      <section className="home-cta">
-        <div className="home-cta-container">
-          <h2 className="home-cta-title">
-            Efficiency Without Compromise
-          </h2>
-          <button className="home-cta-button" onClick={() => openModal("Share your details and we'll schedule a free automation audit to identify opportunities.")}>
-            Book Your Free Automation Audit
-          </button>
         </div>
       </section>
 

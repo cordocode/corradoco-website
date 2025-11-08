@@ -7,60 +7,53 @@
 .flow-content {
   min-height: calc(100vh - 80px);
   display: flex;
+  flex-direction: column;
   position: relative;
   background-color: #ffffe2;
   z-index: 1;
 }
 
-.flow-net-background {
-  position: absolute;
-  right: 100px;
-  top: 0;
-  width: 450px;
-  min-height: 100%;
-  z-index: 0;
-  opacity: 0.6;
-  pointer-events: none;
+/* ============================================
+   FLOW HEADER - NEW
+   ============================================ */
+.flow-header {
+  text-align: center;
+  padding: 80px 20px 40px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.flow-net-background canvas {
-  opacity: 0.8 !important;
+.flow-title {
+  font-family: 'Khand', sans-serif;
+  font-size: 64px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
 }
 
-.flow-net-background::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 180px;
-  height: 100%;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 226, 0.95) 0%,
-    rgba(255, 255, 226, 0.85) 15%,
-    rgba(255, 255, 226, 0.7) 30%,
-    rgba(255, 255, 226, 0.5) 45%,
-    rgba(255, 255, 226, 0.3) 60%,
-    rgba(255, 255, 226, 0.15) 75%,
-    rgba(255, 255, 226, 0.05) 90%,
-    rgba(255, 255, 226, 0) 100%
-  );
-  pointer-events: none;
-  z-index: 1;
+.flow-subtitle {
+  font-family: 'Array', sans-serif;
+  font-size: 20px;
+  color: #4a4a4a;
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
+/* ============================================
+   TIMELINE WRAPPER - CENTERED
+   ============================================ */
 .flow-timeline-wrapper {
   flex: 1;
-  margin-right: 550px;
-  margin-left: 100px;
-  padding: 80px 40px 80px 40px;
+  padding: 40px 20px 80px;
   position: relative;
   z-index: 2;
-  background-color: rgba(255, 255, 226, 0.7);
 }
 
 .flow-timeline-container {
-  max-width: 720px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -76,6 +69,9 @@
   position: relative;
 }
 
+/* ============================================
+   TIMELINE NODE
+   ============================================ */
 .timeline-node {
   flex: 0 0 55px;
   display: flex;
@@ -104,7 +100,7 @@
 }
 
 .timeline-item.visited .node-circle {
-  border-color: #d4a574;
+  border-color: #6a6a6a;
 }
 
 .node-number {
@@ -120,7 +116,7 @@
 }
 
 .timeline-item.visited .node-number {
-  color: #d4a574;
+  color: #6a6a6a;
 }
 
 .timeline-item.expanded.visited .node-number {
@@ -136,13 +132,16 @@
 }
 
 .timeline-item.expanded .node-line {
-  background-color: #d4a574;
+  background-color: #6a6a6a;
 }
 
 .timeline-item.visited .node-line {
-  background-color: #d4a574;
+  background-color: #6a6a6a;
 }
 
+/* ============================================
+   TIMELINE CONTENT
+   ============================================ */
 .timeline-content {
   flex: 1;
   padding-bottom: 40px;
@@ -182,7 +181,7 @@
 }
 
 .timeline-header:hover .timeline-title {
-  color: #d4a574;
+  color: #4a4a4a;
 }
 
 .timeline-subtitle {
@@ -217,8 +216,8 @@
 }
 
 .timeline-item.expanded .timeline-toggle {
-  background-color: #d4a574;
-  border-color: #d4a574;
+  background-color: #4a4a4a;
+  border-color: #4a4a4a;
   color: #ffffe2;
 }
 
@@ -245,37 +244,28 @@
   line-height: 1.7;
   color: #4a4a4a;
   padding: 20px;
-  background-color: rgba(212, 165, 116, 0.05);
-  border-left: 2px solid #d4a574;
+  background-color: rgba(106, 106, 106, 0.05);
+  border-left: 2px solid #6a6a6a;
 }
 
-@media (max-width: 1024px) {
-  .flow-net-background {
-    width: 350px;
-    right: 60px;
-  }
-
-  .flow-timeline-wrapper {
-    margin-right: 410px;
-    padding: 60px 40px 60px 40px;
-    background-color: rgba(255, 255, 226, 0.8);
-  }
-  
-  .flow-net-background::before {
-    width: 140px;
-  }
-}
-
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
 @media (max-width: 768px) {
-  .flow-net-background {
-    display: none;
+  .flow-header {
+    padding: 60px 20px 30px;
+  }
+
+  .flow-title {
+    font-size: 42px;
+  }
+
+  .flow-subtitle {
+    font-size: 18px;
   }
 
   .flow-timeline-wrapper {
-    margin-right: 0;
-    margin-left: 0;
-    padding: 60px 20px;
-    background-color: #ffffe2;
+    padding: 30px 20px 60px;
   }
 
   .timeline-item {
@@ -324,8 +314,20 @@
 }
 
 @media (max-width: 480px) {
+  .flow-header {
+    padding: 50px 20px 30px;
+  }
+
+  .flow-title {
+    font-size: 36px;
+  }
+
+  .flow-subtitle {
+    font-size: 16px;
+  }
+
   .flow-timeline-wrapper {
-    padding: 50px 20px;
+    padding: 30px 20px 50px;
   }
 
   .timeline-item {

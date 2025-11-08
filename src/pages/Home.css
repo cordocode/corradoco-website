@@ -356,13 +356,17 @@
 }
 
 .ai-integration-container {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
+  padding: 0 40px;
 }
 
 .ai-integration-header {
-  text-align: center;
-  margin-bottom: 60px;
+  text-align: right;
+  margin-bottom: 48px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .ai-integration-title {
@@ -385,14 +389,19 @@
 .ai-integration-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .ai-integration-box {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #ffffe2;
   border: 1px solid #1a1a1a;
-  padding: 32px;
+  padding: 20px;
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 280px;
 }
 
 .ai-integration-box:hover {
@@ -401,23 +410,46 @@
   border-color: #1a1a1a;
 }
 
+.ai-box-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.ai-box-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
 .ai-box-title {
   font-family: 'Khand', sans-serif;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 400;
   color: #1a1a1a;
-  margin-bottom: 8px;
   letter-spacing: 0.02em;
   line-height: 1.3;
+  flex: 1;
 }
 
 .ai-box-tagline {
   font-family: 'Array', sans-serif;
-  font-size: 14px;
-  font-style: italic;
-  color: #6a6a6a;
-  margin-bottom: 20px;
-  line-height: 1.4;
+  font-size: 12px;
+  font-style: normal;
+  color: #4a4a4a;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.ai-box-illustration {
+  width: 100%;
+  height: 120px;
+  margin-top: auto;
+  display: block;
+  object-fit: contain;
+  object-position: center;
 }
 
 .ai-box-list {
@@ -454,6 +486,10 @@
     padding: 60px 20px;
   }
 
+  .ai-integration-container {
+    padding: 0 30px;
+  }
+
   .ai-integration-title {
     font-size: 36px;
   }
@@ -464,17 +500,27 @@
 
   .ai-integration-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+    gap: 16px;
+    max-width: 600px;
   }
 
   .ai-integration-box {
-    padding: 28px;
+    padding: 18px;
+    height: 260px;
+  }
+
+  .ai-box-illustration {
+    height: 110px;
   }
 }
 
 @media (max-width: 640px) {
   .ai-integration {
     padding: 50px 20px;
+  }
+
+  .ai-integration-container {
+    padding: 0 20px;
   }
 
   .ai-integration-header {
@@ -491,15 +537,30 @@
 
   .ai-integration-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
+    max-width: 300px;
   }
 
   .ai-integration-box {
-    padding: 24px;
+    padding: 16px;
+    height: 240px;
   }
 
   .ai-box-title {
-    font-size: 22px;
+    font-size: 16px;
+  }
+
+  .ai-box-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .ai-box-illustration {
+    height: 100px;
+  }
+
+  .ai-box-tagline {
+    font-size: 11px;
   }
 }
 
@@ -507,7 +568,7 @@
    PARTNERS SECTION
    ============================================ */
 .partners {
-  padding: 80px 20px;
+  padding: 60px 20px;
   background-color: #ffffe2;
 }
 
@@ -519,11 +580,12 @@
 .partners-title {
   font-family: 'Khand', sans-serif;
   font-weight: 400;
-  font-size: 48px;
+  font-size: 24px;
   text-align: center;
   color: #1a1a1a;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
   letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .partners-carousel-wrapper {
@@ -644,11 +706,10 @@
    CTA SECTION
    ============================================ */
 .home-cta {
-  padding: 60px 20px;
-  background: linear-gradient(135deg, rgba(212, 165, 116, 0.03) 0%, rgba(212, 165, 116, 0.01) 100%);
-  border-top: 1px solid #d4d4d4;
-  /* border-bottom removed to prevent double line with footer */
-  margin-top: 60px;
+  padding: 80px 20px 60px;
+  background-color: #ffffe2;
+  /* border-top removed */
+  margin-top: 0;
 }
 
 .home-cta-container {
@@ -662,9 +723,17 @@
   font-size: 42px;
   font-weight: 400;
   color: #1a1a1a;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   letter-spacing: 0.02em;
   line-height: 1.2;
+}
+
+.home-cta-subtitle {
+  font-family: 'Array', sans-serif;
+  font-size: 15px;
+  color: #4a4a4a;
+  margin-bottom: 28px;
+  line-height: 1.5;
 }
 
 .home-cta-button {
@@ -723,13 +792,18 @@
   
   /* CTA responsive */
   .home-cta {
-    padding: 40px 20px;
-    margin-top: 40px;
+    padding: 60px 20px 40px;
+    margin-top: 0;
   }
   
   .home-cta-title {
     font-size: 32px;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
+  }
+
+  .home-cta-subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
   }
   
   .home-cta-button {
@@ -785,7 +859,12 @@
   
   /* Partners responsive */
   .partners {
-    padding: 60px 20px;
+    padding: 40px 20px;
+  }
+
+  .partners-title {
+    font-size: 20px;
+    margin-bottom: 24px;
   }
   
   .partners-title {

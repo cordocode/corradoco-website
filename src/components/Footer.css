@@ -1,7 +1,7 @@
 .footer {
-  background-color: #ffffe2;
+  background-color: #1a1a1a;
   border-top: 1px solid #1a1a1a;
-  margin-top: 60px;
+  margin-top: 0;
   position: relative;
   z-index: 100; /* ADDED: Ensures footer stays on top of NET animation */
 }
@@ -73,7 +73,7 @@
   font-family: 'Khand', sans-serif;
   font-size: 18px;
   font-weight: 400;
-  color: #1a1a1a;
+  color: #ffffe2;
   margin-bottom: 16px;
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -89,19 +89,19 @@
 .contact-link {
   font-family: 'Array', sans-serif;
   font-size: 14px;
-  color: #4a4a4a;
+  color: #b8b8a0;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .contact-link:hover {
-  color: #1a1a1a;
+  color: #ffffe2;
 }
 
 .contact-location {
   font-family: 'Array', sans-serif;
   font-size: 14px;
-  color: #6a6a6a;
+  color: #8a8a7a;
   margin-top: 6px;
 }
 
@@ -115,7 +115,7 @@
 .footer-link {
   font-family: 'Array', sans-serif;
   font-size: 14px;
-  color: #4a4a4a;
+  color: #b8b8a0;
   text-decoration: none;
   transition: all 0.2s ease;
   position: relative;
@@ -123,7 +123,7 @@
 }
 
 .footer-link:hover {
-  color: #1a1a1a;
+  color: #ffffe2;
   padding-left: 6px;
 }
 
@@ -135,7 +135,7 @@
   transform: translateY(-50%);
   width: 0;
   height: 1px;
-  background-color: #d4a574;
+  background-color: #ffffe2;
   transition: width 0.2s ease;
 }
 
@@ -147,7 +147,7 @@
 .newsletter-text {
   font-family: 'Array', sans-serif;
   font-size: 13px;
-  color: #4a4a4a;
+  color: #b8b8a0;
   margin-bottom: 14px;
   line-height: 1.5;
 }
@@ -156,8 +156,8 @@
   display: flex;
   gap: 0;
   margin-bottom: 6px;
-  border: 1px solid #1a1a1a;
-  background-color: rgba(255, 255, 255, 0.3);
+  border: 1px solid #ffffe2;
+  background-color: rgba(26, 26, 26, 0.5);
   transition: border-color 0.3s ease;
   max-width: 280px;
 }
@@ -173,20 +173,20 @@
   background: transparent;
   font-family: 'Array', sans-serif;
   font-size: 13px;
-  color: #1a1a1a;
+  color: #ffffe2;
   outline: none;
 }
 
 .newsletter-input::placeholder {
-  color: #8a8a8a;
+  color: #6a6a5a;
 }
 
 .newsletter-button {
   padding: 8px 16px;
   background-color: transparent;
-  color: #1a1a1a;
+  color: #ffffe2;
   border: none;
-  border-left: 1px solid #1a1a1a;
+  border-left: 1px solid #ffffe2;
   cursor: pointer;
   font-size: 16px;
   transition: all 0.3s ease;
@@ -196,14 +196,14 @@
 }
 
 .newsletter-button:hover {
-  background-color: #1a1a1a;
-  color: #ffffe2;
+  background-color: #ffffe2;
+  color: #1a1a1a;
 }
 
 .newsletter-success {
   font-family: 'Array', sans-serif;
   font-size: 12px;
-  color: #d4a574;
+  color: #ffffe2;
   margin-top: 6px;
   animation: fadeIn 0.3s ease;
 }
@@ -215,9 +215,9 @@
 
 /* Bottom Bar */
 .footer-bottom {
-  border-top: 1px solid #1a1a1a;
+  border-top: 1px solid #3a3a3a;
   padding: 20px;
-  background-color: rgba(26, 26, 26, 0.02);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .footer-bottom-container {
@@ -231,7 +231,7 @@
 .footer-copyright {
   font-family: 'Array', sans-serif;
   font-size: 12px;
-  color: #6a6a6a;
+  color: #8a8a7a;
 }
 
 .footer-bottom-right {
