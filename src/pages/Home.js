@@ -501,6 +501,85 @@ const Home = () => {
         </div>
       </section>
 
+      {/* AI INTEGRATION SECTION */}
+      <section className="ai-integration">
+        <div className="ai-integration-container">
+          <div className="ai-integration-header">
+            <h2 className="ai-integration-title">What Does "AI Integration" Even Mean?</h2>
+            <p className="ai-integration-subtitle">Less buzzword, more workflow. Six areas where automation delivers:</p>
+          </div>
+
+          <div className="ai-integration-grid">
+            {/* Box 1: Internal Knowledge Assistant */}
+            <div className="ai-integration-box">
+              <h3 className="ai-box-title">Internal Knowledge Assistant</h3>
+              <p className="ai-box-tagline">"Your company's expertise, instantly accessible"</p>
+              <ul className="ai-box-list">
+                <li>Employee LLM trained on your procedures, vendor docs, past projects</li>
+                <li>Answers questions like: "What's our process for X?" "Who handled the Y project?"</li>
+                <li>Replaces hours of searching emails/folders or bothering senior staff</li>
+              </ul>
+            </div>
+
+            {/* Box 2: Customer Self-Service Portal */}
+            <div className="ai-integration-box">
+              <h3 className="ai-box-title">Customer Self-Service Portal</h3>
+              <p className="ai-box-tagline">"Let customers get answers without calling your office"</p>
+              <ul className="ai-box-list">
+                <li>External-facing LLM that answers FAQs, retrieves documents, checks status</li>
+                <li>Examples: "What's my invoice status?" "Send me the warranty info" "What's included in my service plan?"</li>
+                <li>Reduces admin burden, improves response time</li>
+              </ul>
+            </div>
+
+            {/* Box 3: Document Intelligence */}
+            <div className="ai-integration-box">
+              <h3 className="ai-box-title">Document Intelligence</h3>
+              <p className="ai-box-tagline">"Files that organize, rename, and route themselves"</p>
+              <ul className="ai-box-list">
+                <li>Auto-naming conventions (job #, date, type)</li>
+                <li>Auto-routing to correct folders/people</li>
+                <li>Extraction of key data from PDFs (invoices, submittals, inspection reports)</li>
+              </ul>
+            </div>
+
+            {/* Box 4: Data Bridge Automation */}
+            <div className="ai-integration-box">
+              <h3 className="ai-box-title">Data Bridge Automation</h3>
+              <p className="ai-box-tagline">"Information flows between your systems automatically"</p>
+              <ul className="ai-box-list">
+                <li>When X happens in System A, update System B</li>
+                <li>Examples: CRM → accounting, field app → project management, inspection report → client portal</li>
+                <li>Eliminates double-entry, reduces errors</li>
+              </ul>
+            </div>
+
+            {/* Box 5: Intelligent Document Processing */}
+            <div className="ai-integration-box">
+              <h3 className="ai-box-title">Intelligent Document Processing</h3>
+              <p className="ai-box-tagline">"AI reads and acts on your industry-specific documents"</p>
+              <ul className="ai-box-list">
+                <li>Technical drawings, inspection reports, work orders analyzed for key information</li>
+                <li>Invoices automatically matched to purchase orders and job codes</li>
+                <li>Compliance documents flagged for required actions or missing information</li>
+                <li>Gives you a head start on tedious document review and data extraction</li>
+              </ul>
+            </div>
+
+            {/* Box 6: Proactive Follow-Up System */}
+            <div className="ai-integration-box">
+              <h3 className="ai-box-title">Proactive Follow-Up System</h3>
+              <p className="ai-box-tagline">"Stop chasing people manually"</p>
+              <ul className="ai-box-list">
+                <li>Auto-reminders for pending approvals, overdue items, required signatures</li>
+                <li>Escalation chains when things aren't completed</li>
+                <li>Smart enough to know when to stop (task completed) or escalate (ignored too long)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* PARTNERS SECTION */}
       <section className="partners">
         <div className="partners-container">
