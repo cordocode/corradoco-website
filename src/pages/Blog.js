@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import ReactMarkdown from 'react-markdown';
 import './Blog.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -18,6 +19,7 @@ const Blog = () => {
   const [passwordInput, setPasswordInput] = useState('');
   const [editingPost, setEditingPost] = useState(null);
   const [creatingNew, setCreatingNew] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -31,7 +33,6 @@ const Blog = () => {
         .select('*')
         .order('published_at', { ascending: false });
       
-      // If not admin, only show published posts
       if (!isAdmin) {
         query = query.eq('published', true);
       }
@@ -49,13 +50,11 @@ const Blog = () => {
   }, [isAdmin]);
 
   useEffect(() => {
-    // Check if admin mode requested via URL
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === 'true' && !isAdmin) {
       setShowPasswordPrompt(true);
     }
     
-    // Check if already authenticated (session storage)
     const adminAuth = sessionStorage.getItem('blog_admin_auth');
     if (adminAuth === 'true') {
       setIsAdmin(true);
@@ -66,13 +65,12 @@ const Blog = () => {
 
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
-    // Simple password check (you can change this password)
     if (passwordInput === '12345') {
       setIsAdmin(true);
       sessionStorage.setItem('blog_admin_auth', 'true');
       setShowPasswordPrompt(false);
       setPasswordInput('');
-      fetchPosts(); // Refetch to show all posts including unpublished
+      fetchPosts();
     } else {
       alert('Incorrect password');
       setPasswordInput('');
@@ -94,6 +92,7 @@ const Blog = () => {
 
   const handleCreateNew = () => {
     setCreatingNew(true);
+    setSelectedPost(null);
     setFormData({
       title: '',
       content: '',
@@ -103,6 +102,7 @@ const Blog = () => {
 
   const handleEdit = (post) => {
     setEditingPost(post.id);
+    setSelectedPost(null);
     setFormData({
       title: post.title,
       content: post.content,
@@ -137,7 +137,6 @@ const Blog = () => {
       };
 
       if (editingPost) {
-        // Update existing post
         const { error } = await supabase
           .from('blog_posts')
           .update(postData)
@@ -145,7 +144,6 @@ const Blog = () => {
 
         if (error) throw error;
       } else {
-        // Create new post
         const { error } = await supabase
           .from('blog_posts')
           .insert([postData]);
@@ -153,7 +151,6 @@ const Blog = () => {
         if (error) throw error;
       }
 
-      // Reset form and refetch posts
       handleCancelEdit();
       fetchPosts();
     } catch (error) {
@@ -175,6 +172,7 @@ const Blog = () => {
 
       if (error) throw error;
 
+      setSelectedPost(null);
       fetchPosts();
     } catch (error) {
       console.error('Error deleting post:', error);
@@ -192,11 +190,143 @@ const Blog = () => {
     });
   };
 
+  const createExcerpt = (content, maxLength = 150) => {
+    const plainText = content.replace(/[#*\-\[\]]/g, '').replace(/\n/g, ' ').trim();
+    if (plainText.length <= maxLength) return plainText;
+    return plainText.substring(0, maxLength) + '...';
+  };
+
+  const handleCardClick = (post) => {
+    if (!isAdmin || (!editingPost && !creatingNew)) {
+      setSelectedPost(post);
+    }
+  };
+
+  const handleBackToList = () => {
+    setSelectedPost(null);
+  };
+
+  // Custom markdown components for styling
+  const markdownComponents = {
+    h2: ({node, ...props}) => <h2 style={{fontFamily: 'Khand, sans-serif', fontSize: '36px', fontWeight: '400', marginTop: '48px', marginBottom: '24px', letterSpacing: '0.02em'}} {...props} />,
+    h3: ({node, ...props}) => <h3 style={{fontFamily: 'Khand, sans-serif', fontSize: '28px', fontWeight: '400', marginTop: '36px', marginBottom: '20px', letterSpacing: '0.02em'}} {...props} />,
+    p: ({node, ...props}) => <p style={{marginBottom: '24px', lineHeight: '1.5'}} {...props} />,
+    ul: ({node, ...props}) => <ul style={{marginLeft: '24px', marginBottom: '24px'}} {...props} />,
+    ol: ({node, ...props}) => <ol style={{marginLeft: '24px', marginBottom: '24px'}} {...props} />,
+    li: ({node, ...props}) => <li style={{marginBottom: '12px', lineHeight: '1.5'}} {...props} />,
+    strong: ({node, ...props}) => <strong style={{fontWeight: '600'}} {...props} />,
+    blockquote: ({node, ...props}) => (
+      <blockquote style={{
+        borderLeft: '3px solid #1a1a1a',
+        paddingLeft: '24px',
+        margin: '32px 0',
+        fontStyle: 'italic',
+        color: '#4a4a4a'
+      }} {...props} />
+    ),
+  };
+
+  // If viewing a single post
+  if (selectedPost && !isAdmin) {
+    return (
+      <div className="blog">
+        <Header />
+        
+        <section className="blog-content">
+          <div className="single-post-view">
+            <div className="single-post-back" onClick={handleBackToList}>
+              ← Back to Blog
+            </div>
+
+            <div className="single-post-header">
+              <h1 className="single-post-title">{selectedPost.title}</h1>
+              <div className="single-post-meta">
+                <span className="single-post-date">
+                  {formatDate(selectedPost.published_at)}
+                </span>
+              </div>
+            </div>
+
+            <div className="single-post-content">
+              <ReactMarkdown components={markdownComponents}>
+                {selectedPost.content}
+              </ReactMarkdown>
+            </div>
+          </div>
+        </section>
+
+        <Footer />
+      </div>
+    );
+  }
+
+  // If admin is viewing a single post
+  if (selectedPost && isAdmin && !editingPost) {
+    return (
+      <div className="blog">
+        <Header />
+        
+        <section className="blog-content">
+          <div className="blog-container">
+            <div className="admin-header">
+              <button className="admin-new-post" onClick={handleCreateNew}>
+                + New Post
+              </button>
+              <button className="admin-logout" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
+
+            <div className="single-post-view">
+              <div className="single-post-back" onClick={handleBackToList}>
+                ← Back to Blog
+              </div>
+
+              <div className="single-post-header">
+                <h1 className="single-post-title">{selectedPost.title}</h1>
+                <div className="single-post-meta">
+                  <span className="single-post-date">
+                    {formatDate(selectedPost.published_at)}
+                  </span>
+                  {!selectedPost.published && (
+                    <span className="post-draft-badge">DRAFT</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="single-post-content">
+                <ReactMarkdown components={markdownComponents}>
+                  {selectedPost.content}
+                </ReactMarkdown>
+              </div>
+
+              <div className="post-admin-actions">
+                <button 
+                  onClick={() => handleEdit(selectedPost)} 
+                  className="post-button-edit"
+                >
+                  Edit
+                </button>
+                <button 
+                  onClick={() => handleDeletePost(selectedPost.id)} 
+                  className="post-button-delete"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="blog">
       <Header />
       
-      {/* Password Prompt Modal */}
       {showPasswordPrompt && (
         <div className="admin-modal-overlay">
           <div className="admin-modal">
@@ -232,7 +362,6 @@ const Blog = () => {
 
       <section className="blog-content">
         <div className="blog-container">
-          {/* Admin Header */}
           {isAdmin && (
             <div className="admin-header">
               <button className="admin-new-post" onClick={handleCreateNew}>
@@ -244,7 +373,6 @@ const Blog = () => {
             </div>
           )}
 
-          {/* New Post Form */}
           {creatingNew && (
             <div className="post-edit-form">
               <h3 className="form-title">New Post</h3>
@@ -258,10 +386,13 @@ const Blog = () => {
               <textarea
                 value={formData.content}
                 onChange={(e) => setFormData({...formData, content: e.target.value})}
-                placeholder="Post content (paste from Google Docs)..."
+                placeholder="Post content (use Markdown for formatting: **bold**, ## Headers, - bullets)"
                 className="form-textarea-content"
                 rows={15}
               />
+              <div className="markdown-help">
+                <strong>Markdown Tips:</strong> **bold**, *italic*, ## Section Header, ### Subheader, - bullet, 1. numbered
+              </div>
               <div className="form-actions">
                 <label className="form-checkbox">
                   <input
@@ -274,6 +405,47 @@ const Blog = () => {
                 <div className="form-buttons">
                   <button onClick={handleSavePost} className="form-button-save">
                     Save Post
+                  </button>
+                  <button onClick={handleCancelEdit} className="form-button-cancel">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {editingPost && (
+            <div className="post-edit-form">
+              <h3 className="form-title">Edit Post</h3>
+              <input
+                type="text"
+                value={formData.title}
+                onChange={(e) => setFormData({...formData, title: e.target.value})}
+                placeholder="Post Title"
+                className="form-input-title"
+              />
+              <textarea
+                value={formData.content}
+                onChange={(e) => setFormData({...formData, content: e.target.value})}
+                placeholder="Post content (use Markdown for formatting)"
+                className="form-textarea-content"
+                rows={15}
+              />
+              <div className="markdown-help">
+                <strong>Markdown Tips:</strong> **bold**, *italic*, ## Section Header, ### Subheader, - bullet, 1. numbered
+              </div>
+              <div className="form-actions">
+                <label className="form-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={formData.published}
+                    onChange={(e) => setFormData({...formData, published: e.target.checked})}
+                  />
+                  <span>Published</span>
+                </label>
+                <div className="form-buttons">
+                  <button onClick={handleSavePost} className="form-button-save">
+                    Save Changes
                   </button>
                   <button onClick={handleCancelEdit} className="form-button-cancel">
                     Cancel
@@ -297,97 +469,36 @@ const Blog = () => {
               </p>
             </div>
           ) : (
-            <div className="blog-posts">
+            <div className="blog-posts-grid">
               {posts.map((post) => (
-                <article key={post.id} className="blog-post">
-                  {editingPost === post.id ? (
-                    // Edit Form
-                    <div className="post-edit-form">
-                      <h3 className="form-title">Edit Post</h3>
-                      <input
-                        type="text"
-                        value={formData.title}
-                        onChange={(e) => setFormData({...formData, title: e.target.value})}
-                        placeholder="Post Title"
-                        className="form-input-title"
-                      />
-                      <textarea
-                        value={formData.content}
-                        onChange={(e) => setFormData({...formData, content: e.target.value})}
-                        placeholder="Post content..."
-                        className="form-textarea-content"
-                        rows={15}
-                      />
-                      <div className="form-actions">
-                        <label className="form-checkbox">
-                          <input
-                            type="checkbox"
-                            checked={formData.published}
-                            onChange={(e) => setFormData({...formData, published: e.target.checked})}
-                          />
-                          <span>Published</span>
-                        </label>
-                        <div className="form-buttons">
-                          <button onClick={handleSavePost} className="form-button-save">
-                            Save Changes
-                          </button>
-                          <button onClick={handleCancelEdit} className="form-button-cancel">
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
+                <div 
+                  key={post.id} 
+                  className="blog-card"
+                  onClick={() => handleCardClick(post)}
+                >
+                  <div className="blog-card-content">
+                    <div className="blog-card-header">
+                      <h2 className="blog-card-title">
+                        {post.title}
+                        {isAdmin && !post.published && (
+                          <span className="post-draft-badge">DRAFT</span>
+                        )}
+                      </h2>
+                      <span className="blog-card-date">
+                        {formatDate(post.published_at)}
+                      </span>
                     </div>
-                  ) : (
-                    // Display Post
-                    <>
-                      <div className="post-header">
-                        <h2 className="post-title">
-                          {post.title}
-                          {isAdmin && !post.published && (
-                            <span className="post-draft-badge">DRAFT</span>
-                          )}
-                        </h2>
-                        <span className="post-date">{formatDate(post.published_at)}</span>
-                      </div>
-                      <div className="post-content">
-                        {post.content.split('\n').map((paragraph, index) => (
-                          paragraph.trim() && <p key={index}>{paragraph}</p>
-                        ))}
-                      </div>
-                      {isAdmin && (
-                        <div className="post-admin-actions">
-                          <button 
-                            onClick={() => handleEdit(post)} 
-                            className="post-button-edit"
-                          >
-                            Edit
-                          </button>
-                          <button 
-                            onClick={() => handleDeletePost(post.id)} 
-                            className="post-button-delete"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </article>
+                    <p className="blog-card-excerpt">
+                      {createExcerpt(post.content)}
+                    </p>
+                    <span className="blog-card-read-more">
+                      Read More →
+                    </span>
+                  </div>
+                </div>
               ))}
             </div>
           )}
-        </div>
-      </section>
-
-      {/* CTA SECTION - Blog Version */}
-      <section className="blog-cta">
-        <div className="blog-cta-container">
-          <h2 className="blog-cta-title">
-            Discover the Possibilities
-          </h2>
-          <a href="mailto:ben@corradoco.com" className="blog-cta-button">
-            Book Your Free Automation Audit
-          </a>
         </div>
       </section>
 
