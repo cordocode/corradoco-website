@@ -7,11 +7,26 @@ import Modal from '../components/Modal';
 import BIRDS from 'vanta/dist/vanta.birds.min';
 // NOTE: Three.js loaded via CDN in index.html
 
-// Import partner logos from assets folder (via symlink)
+// Import partner logos
 import fleetAdvisor from '../assets/customer-logos/fleet_advisor.svg';
 import vwco from '../assets/customer-logos/vwco.svg';
 import norcon from '../assets/customer-logos/norcon.svg';
 import reliant from '../assets/customer-logos/reliant.svg';
+
+// Import AI Integration icons and illustrations as URLs
+import iconInternalKnowledge from '../assets/Icon_Internal Knowledge Assistant.svg?url';
+import iconCustomerPortal from '../assets/Icon_Customer Self-Service Portal.svg?url';
+import iconDocumentIntelligence from '../assets/Icon_Document Intelligence.svg?url';
+import iconDataBridge from '../assets/Icon_Data Bridge Automation.svg?url';
+import iconIntelligentDoc from '../assets/Icon_Intelligent Document Processing.svg?url';
+import iconProactiveFollowUp from '../assets/Icon_Proactive Follow-Up System.svg?url';
+
+import illustrationInternalKnowledge from '../assets/Illustration_Internal Knowledge Assistant.svg?url';
+import illustrationCustomerPortal from '../assets/Illustration_Customer Self-Service Portal .svg?url';
+import illustrationDocumentIntelligence from '../assets/Illustration_Document Intelligence.svg?url';
+import illustrationDataBridge from '../assets/Illustration_Data Bridge Automation .svg?url';
+import illustrationIntelligentDoc from '../assets/Illustration_Intelligent Document Processing.svg?url';
+import illustrationProactiveFollowUp from '../assets/Illustration_Proactive Follow-Up System.svg?url';
 
 const Home = () => {
   // ============ VANTA BIRDS EFFECT ============
@@ -28,7 +43,7 @@ const Home = () => {
     setIsModalOpen(true);
   };
 
-  // ============ GENERATE DYNAMIC SUBTITLE FROM CONVERSATION (for inline button only) ============
+  // ============ GENERATE DYNAMIC SUBTITLE FROM CONVERSATION ============
   const getConversationSubtitle = () => {
     const userMessages = messages.filter(m => m.type === 'user');
     
@@ -39,7 +54,6 @@ const Home = () => {
     const lastUserMessage = userMessages[userMessages.length - 1]?.content || '';
     const lowercaseMessage = lastUserMessage.toLowerCase();
     
-    // Try to extract process name
     if (lowercaseMessage.includes('email') || lowercaseMessage.includes('scheduling')) {
       return "Let's explore your email scheduling automation in detail.";
     } else if (lowercaseMessage.includes('invoice') || lowercaseMessage.includes('billing')) {
@@ -66,27 +80,69 @@ const Home = () => {
   const [inputText, setInputText] = useState('');
   const [showArrow, setShowArrow] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
-
-  // Store conversation history for API calls
   const [conversationHistory, setConversationHistory] = useState([]);
 
   // ============ PARTNERS CAROUSEL STATE ============
   const scrollRef = useRef(null);
   
-  // Partner logos array with duplicates for seamless scrolling
   const logos = [
     { id: 1, src: fleetAdvisor, alt: 'Fleet Advisor', name: 'fleet-advisor' },
     { id: 2, src: vwco, alt: 'VWCO', name: 'vwco' },
     { id: 3, src: norcon, alt: 'Norcon', name: 'norcon' },
     { id: 4, src: reliant, alt: 'Reliant', name: 'reliant' },
-    // Duplicate for seamless loop
     { id: 5, src: fleetAdvisor, alt: 'Fleet Advisor', name: 'fleet-advisor' },
     { id: 6, src: vwco, alt: 'VWCO', name: 'vwco' },
     { id: 7, src: norcon, alt: 'Norcon', name: 'norcon' },
     { id: 8, src: reliant, alt: 'Reliant', name: 'reliant' },
   ];
 
-  // ============ VANTA BIRDS INITIALIZATION (using CDN THREE) ============
+  // ============ AI INTEGRATION BOXES DATA ============
+  const aiIntegrationBoxes = [
+    {
+      id: 1,
+      icon: iconInternalKnowledge,
+      title: 'Internal Knowledge Assistant',
+      tagline: 'Your company\'s expertise, instantly accessible',
+      illustration: illustrationInternalKnowledge
+    },
+    {
+      id: 2,
+      icon: iconCustomerPortal,
+      title: 'Customer Self-Service Portal',
+      tagline: 'Let customers get answers without calling',
+      illustration: illustrationCustomerPortal
+    },
+    {
+      id: 3,
+      icon: iconDocumentIntelligence,
+      title: 'Document Intelligence',
+      tagline: 'Files that organize and route themselves',
+      illustration: illustrationDocumentIntelligence
+    },
+    {
+      id: 4,
+      icon: iconDataBridge,
+      title: 'Data Bridge Automation',
+      tagline: 'Information flows between systems automatically',
+      illustration: illustrationDataBridge
+    },
+    {
+      id: 5,
+      icon: iconIntelligentDoc,
+      title: 'Intelligent Document Processing',
+      tagline: 'AI reads your technical documents',
+      illustration: illustrationIntelligentDoc
+    },
+    {
+      id: 6,
+      icon: iconProactiveFollowUp,
+      title: 'Proactive Follow-Up System',
+      tagline: 'Automated reminders and escalations',
+      illustration: illustrationProactiveFollowUp
+    }
+  ];
+
+  // ============ VANTA BIRDS INITIALIZATION ============
   useEffect(() => {
     if (!vantaEffect && window.THREE) {
       setVantaEffect(
@@ -124,7 +180,6 @@ const Home = () => {
     try {
       setIsStreaming(true);
       
-      // Build conversation history for API
       let messagesToSend;
       
       if (isInitial) {
@@ -144,10 +199,8 @@ const Home = () => {
         ];
       }
 
-      // Create unique ID for this AI message
       const aiMessageId = Date.now() + Math.random();
       
-      // Create placeholder AI message with unique ID
       setMessages(prev => [...prev, { 
         id: aiMessageId,
         type: 'ai', 
@@ -155,7 +208,6 @@ const Home = () => {
         isTyping: true 
       }]);
 
-      // Call the streaming API
       const apiUrl = process.env.NODE_ENV === 'production' 
         ? '/api/chat' 
         : 'http://localhost:5001/api/chat';
@@ -176,7 +228,6 @@ const Home = () => {
         throw new Error('API request failed');
       }
 
-      // Read the streaming response
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let aiResponse = '';
@@ -204,10 +255,8 @@ const Home = () => {
                 const contentToAdd = parsed.content;
                 aiResponse += contentToAdd;
                 
-                // Capture the current value before creating the function
                 const currentResponse = aiResponse;
                 
-                // Update the message by ID
                 setMessages(prev => {
                   return prev.map(msg => 
                     msg.id === aiMessageId 
@@ -223,18 +272,15 @@ const Home = () => {
         }
       }
       
-      // Check if response includes schedule call marker
       const hasScheduleButton = aiResponse.includes('[SCHEDULE_CALL]');
       const cleanedResponse = aiResponse.replace('[SCHEDULE_CALL]', '').trim();
       
-      // Mark typing as complete
       setMessages(prev => prev.map(msg =>
         msg.id === aiMessageId
           ? { ...msg, content: cleanedResponse, isTyping: false, showScheduleButton: hasScheduleButton }
           : msg
       ));
       
-      // Update conversation history
       setConversationHistory(prev => [
         ...prev,
         { role: 'user', content: userMessage },
@@ -266,41 +312,33 @@ const Home = () => {
     setShowArrow(false);
     
     if (!chatStarted) {
-      // Calculate annual value of time saved
       const hoursPerYear = hoursPerWeek * 52;
       const hourlyRate = avgSalary / 2080;
       const totalValue = Math.round(hoursPerYear * employees * hourlyRate);
       
-      // Lock the sliders and start the chat
       setChatStarted(true);
       
-      // Simple initial message for the user to see
       const initialMessage = `I want to explore automating a process that could save ${hoursPerWeek} hours per week for ${employees} ${employees === 1 ? 'employee' : 'employees'} making $${avgSalary.toLocaleString()} per year.`;
       
-      // Prepare slider data for context
       const sliderValues = {
         hoursPerWeek,
         employees,
         avgSalary
       };
       
-      // Call the streaming API with the calculated value and slider data
       await callStreamingAPI(initialMessage, true, totalValue, sliderValues);
       
     } else if (inputText.trim() && !isStreaming) {
       const userMessage = inputText;
       
-      // Clear input immediately
       setInputText('');
       
-      // Add user message with unique ID
       setMessages(prev => [...prev, { 
         id: Date.now() + Math.random(),
         type: 'user', 
         content: userMessage 
       }]);
       
-      // Then call API (which will add AI placeholder)
       await callStreamingAPI(userMessage, false, null, null);
     }
   };
@@ -369,7 +407,6 @@ const Home = () => {
   }, []);
   
   const handleLogoClick = (logoName) => {
-    // TODO: Add partner description expansion
     console.log(`Clicked on ${logoName}`);
   };
 
@@ -408,7 +445,6 @@ const Home = () => {
             )}
             <div className={`chat-window ${chatStarted ? 'expanded' : ''}`}>
               <div className={`messages-area ${chatStarted ? 'expanded' : ''}`}>
-              {/* Initial message with sliders - always visible */}
               <div className="message ai-message pre-filled">
                 <span className="message-label">AI:</span>
                 <span className="message-content">
@@ -447,7 +483,6 @@ const Home = () => {
                 </span>
               </div>
               
-              {/* New messages appear below */}
               {messages.map((message) => (
                 <div key={message.id} className={`message ${message.type}-message ${message.isTyping ? 'typing' : ''}`}>
                   <span className="message-label">{message.type === 'ai' ? 'AI:' : 'You:'}</span>
@@ -510,72 +545,25 @@ const Home = () => {
           </div>
 
           <div className="ai-integration-grid">
-            {/* Box 1: Internal Knowledge Assistant */}
-            <div className="ai-integration-box">
-              <h3 className="ai-box-title">Internal Knowledge Assistant</h3>
-              <p className="ai-box-tagline">"Your company's expertise, instantly accessible"</p>
-              <ul className="ai-box-list">
-                <li>Employee LLM trained on your procedures, vendor docs, past projects</li>
-                <li>Answers questions like: "What's our process for X?" "Who handled the Y project?"</li>
-                <li>Replaces hours of searching emails/folders or bothering senior staff</li>
-              </ul>
-            </div>
-
-            {/* Box 2: Customer Self-Service Portal */}
-            <div className="ai-integration-box">
-              <h3 className="ai-box-title">Customer Self-Service Portal</h3>
-              <p className="ai-box-tagline">"Let customers get answers without calling your office"</p>
-              <ul className="ai-box-list">
-                <li>External-facing LLM that answers FAQs, retrieves documents, checks status</li>
-                <li>Examples: "What's my invoice status?" "Send me the warranty info" "What's included in my service plan?"</li>
-                <li>Reduces admin burden, improves response time</li>
-              </ul>
-            </div>
-
-            {/* Box 3: Document Intelligence */}
-            <div className="ai-integration-box">
-              <h3 className="ai-box-title">Document Intelligence</h3>
-              <p className="ai-box-tagline">"Files that organize, rename, and route themselves"</p>
-              <ul className="ai-box-list">
-                <li>Auto-naming conventions (job #, date, type)</li>
-                <li>Auto-routing to correct folders/people</li>
-                <li>Extraction of key data from PDFs (invoices, submittals, inspection reports)</li>
-              </ul>
-            </div>
-
-            {/* Box 4: Data Bridge Automation */}
-            <div className="ai-integration-box">
-              <h3 className="ai-box-title">Data Bridge Automation</h3>
-              <p className="ai-box-tagline">"Information flows between your systems automatically"</p>
-              <ul className="ai-box-list">
-                <li>When X happens in System A, update System B</li>
-                <li>Examples: CRM → accounting, field app → project management, inspection report → client portal</li>
-                <li>Eliminates double-entry, reduces errors</li>
-              </ul>
-            </div>
-
-            {/* Box 5: Intelligent Document Processing */}
-            <div className="ai-integration-box">
-              <h3 className="ai-box-title">Intelligent Document Processing</h3>
-              <p className="ai-box-tagline">"AI reads and acts on your industry-specific documents"</p>
-              <ul className="ai-box-list">
-                <li>Technical drawings, inspection reports, work orders analyzed for key information</li>
-                <li>Invoices automatically matched to purchase orders and job codes</li>
-                <li>Compliance documents flagged for required actions or missing information</li>
-                <li>Gives you a head start on tedious document review and data extraction</li>
-              </ul>
-            </div>
-
-            {/* Box 6: Proactive Follow-Up System */}
-            <div className="ai-integration-box">
-              <h3 className="ai-box-title">Proactive Follow-Up System</h3>
-              <p className="ai-box-tagline">"Stop chasing people manually"</p>
-              <ul className="ai-box-list">
-                <li>Auto-reminders for pending approvals, overdue items, required signatures</li>
-                <li>Escalation chains when things aren't completed</li>
-                <li>Smart enough to know when to stop (task completed) or escalate (ignored too long)</li>
-              </ul>
-            </div>
+            {aiIntegrationBoxes.map((box) => (
+              <div key={box.id} className="ai-integration-box">
+                <div className="ai-box-header">
+                  <img 
+                    src={box.icon}
+                    alt={`${box.title} icon`} 
+                    className="ai-box-icon"
+                    style={{ filter: 'invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(10%) contrast(100%)' }}
+                  />
+                  <h3 className="ai-box-title">{box.title}</h3>
+                </div>
+                <p className="ai-box-tagline">{box.tagline}</p>
+                <img 
+                  src={box.illustration}
+                  alt={`${box.title} illustration`} 
+                  className="ai-box-illustration"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
