@@ -1,13 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Flow.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Modal from '../components/Modal';
+import Slider from '../components/Slider';
+import scootImage from '../assets/scoot.png';
+import benImage from '../assets/ben.png';
 
 const Flow = () => {
   const [expandedPhase, setExpandedPhase] = useState(null);
   const [visitedPhases, setVisitedPhases] = useState(new Set());
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Value calculator state
+  const [employees, setEmployees] = useState(10);
+  const [hours, setHours] = useState(5);
+  const [salary, setSalary] = useState(75000);
+  const [result, setResult] = useState(0);
+  const [showResult, setShowResult] = useState(false);
+
+  useEffect(() => {
+    // Wait for Vanta to be available, then initialize
+    const timer = setTimeout(() => {
+      if (window.VANTA && window.VANTA.NET) {
+        console.log('Initializing Vanta NET');
+        window.VANTA.NET({
+          el: '#flow-net-background',
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.0,
+          minWidth: 200.0,
+          scale: 1.5,
+          scaleMobile: 1.0,
+          color: 0x1a1a1a,
+          backgroundColor: 0xffffe2,
+          points: 4.0,
+          maxDistance: 40.0,
+          spacing: 25.0,
+        });
+      } else {
+        console.warn('Vanta NET not available');
+      }
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    // Update NET animation based on visited phases
+    const timer = setTimeout(() => {
+      if (window.VANTA && window.VANTA.NET) {
+        const visitedCount = visitedPhases.size;
+        const points = Math.max(4, 4 + visitedCount * 0.8);
+        const maxDistance = Math.max(40, 40 + visitedCount * 3);
+        
+        window.VANTA.NET({
+          el: '#flow-net-background',
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.0,
+          minWidth: 200.0,
+          scale: 1.5,
+          scaleMobile: 1.0,
+          color: 0x1a1a1a,
+          backgroundColor: 0xffffe2,
+          points: points,
+          maxDistance: maxDistance,
+          spacing: 25.0,
+        });
+      }
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, [visitedPhases]);
 
   const phases = [
     {
@@ -60,6 +127,9 @@ const Flow = () => {
   return (
     <div className="flow">
       <Header />
+      
+      {/* NET Background Animation */}
+      <div id="flow-net-background" className="flow-net-background"></div>
       
       {/* Flow Content */}
       <section className="flow-content">
@@ -115,10 +185,144 @@ const Flow = () => {
         </div>
       </section>
 
+      {/* About Section */}
+      <section className="flow-about">
+        <div className="flow-about-container">
+          <h2 className="flow-about-title">Our Team</h2>
+          <div className="flow-about-grid">
+            {/* Scoot */}
+            <div className="about-person">
+              <div className="about-image-wrapper">
+                <img src={scootImage} alt="Scoot Norwesh" className="about-image" />
+              </div>
+              <h3 className="about-name">Scoot Norwesh</h3>
+              <p className="about-role">Business Guy</p>
+              <p className="about-description">
+                Scoot has a knack for turning strangers into friends and ideas into action. With a background in business and marketing, he's the guy who makes sure projects actually happen (and that everyone enjoys the process). He also happens to be a professional Skateboarder.
+              </p>
+            </div>
+
+            {/* Ben */}
+            <div className="about-person">
+              <div className="about-image-wrapper">
+                <img src={benImage} alt="Ben Corrado" className="about-image" />
+              </div>
+              <h3 className="about-name">Ben Corrado</h3>
+              <p className="about-role">Tech Guy</p>
+              <p className="about-description">
+                Ben's curiosity has taken him through filmmaking, furniture making, and now automation. Each project taught him something new, and all of them reinforced two core values: efficiency and excellence. He builds systems that don't just work—they work beautifully.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Value Calculator Section */}
+      <section className="flow-value">
+        <div className="flow-value-container">
+          <h2 className="flow-value-title">We Serve Those Who See The Value</h2>
+          <p className="flow-value-subtitle">
+            Adjust the sliders below to calculate how much manual work is costing your business each year.
+          </p>
+          
+          <div className="flow-value-cards">
+            {/* Card 1: Employees */}
+            <div className="value-card">
+              <div className="value-number">{employees}</div>
+              <div className="value-label">Employees</div>
+              <div className="value-slider-wrapper">
+                <Slider
+                  value={employees}
+                  onChange={(val) => {
+                    setEmployees(val);
+                    setShowResult(false);
+                  }}
+                  min={1}
+                  max={50}
+                  width="100%"
+                  displayValue=""
+                  suffix=""
+                />
+              </div>
+            </div>
+
+            {/* Card 2: Hours */}
+            <div className="value-card">
+              <div className="value-number">{hours}</div>
+              <div className="value-label">Hours Per Week</div>
+              <div className="value-slider-wrapper">
+                <Slider
+                  value={hours}
+                  onChange={(val) => {
+                    setHours(val);
+                    setShowResult(false);
+                  }}
+                  min={1}
+                  max={20}
+                  width="100%"
+                  displayValue=""
+                  suffix=""
+                />
+              </div>
+            </div>
+
+            {/* Card 3: Salary */}
+            <div className="value-card">
+              <div className="value-number">${(salary/1000).toFixed(0)}k</div>
+              <div className="value-label">Average Salary</div>
+              <div className="value-slider-wrapper">
+                <Slider
+                  value={salary}
+                  onChange={(val) => {
+                    setSalary(val);
+                    setShowResult(false);
+                  }}
+                  min={40000}
+                  max={150000}
+                  step={5000}
+                  width="100%"
+                  displayValue=""
+                  suffix=""
+                />
+              </div>
+            </div>
+
+            {/* Card 4: Calculate/Result */}
+            <div 
+              className={`value-card value-card-result ${showResult ? 'calculated' : ''}`}
+              onClick={() => {
+                if (!showResult) {
+                  const hourlyRate = salary / 2000;
+                  const totalHours = employees * hours * 52;
+                  const annualCost = Math.round(totalHours * hourlyRate);
+                  setResult(annualCost);
+                  setShowResult(true);
+                }
+              }}
+            >
+              <div className="value-result-content">
+                {!showResult ? (
+                  <div className="value-calculate">Calculate</div>
+                ) : (
+                  <>
+                    <div className="value-result-number">${(result/1000).toFixed(0)}k</div>
+                    <div className="value-result-label">Annual Value</div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <p className="flow-value-text">
+            We serve those who see the math. If your people don't have enough hours to do what grows the business, and you're ready to fix that permanently—let's talk.
+          </p>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="flow-cta">
         <div className="flow-cta-container">
-          <h2 className="flow-cta-title">Let's Start With Step 1!</h2>
+          <h2 className="flow-cta-title">Let's Start Simple</h2>
           <p className="flow-cta-subtitle">
             Free discovery call to identify which manual process you could automate.
           </p>

@@ -4,13 +4,33 @@
   position: relative;
 }
 
+/* ============================================
+   NET BACKGROUND ANIMATION
+   ============================================ */
+.flow-net-background {
+  position: absolute;
+  top: 80px;
+  left: 0;
+  right: 0;
+  height: 600px;
+  z-index: 1;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.flow-net-background canvas {
+  opacity: 1 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .flow-content {
   min-height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
   position: relative;
   background-color: #ffffe2;
-  z-index: 1;
+  z-index: 2;
 }
 
 /* ============================================
@@ -21,6 +41,8 @@
   padding: 80px 20px 40px;
   max-width: 900px;
   margin: 0 auto;
+  position: relative;
+  z-index: 3;
 }
 
 .flow-title {
@@ -249,6 +271,93 @@
 }
 
 /* ============================================
+   ABOUT SECTION
+   ============================================ */
+.flow-about {
+  padding: 50px 20px;
+  background-color: #1a1a1a;
+  border-top: none;
+}
+
+.flow-about-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.flow-about-title {
+  font-family: 'Khand', sans-serif;
+  font-size: 48px;
+  font-weight: 400;
+  color: #ffffe2;
+  margin-bottom: 50px;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.flow-about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 60px;
+}
+
+.about-person {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.about-image-wrapper {
+  width: 180px;
+  height: 180px;
+  border: 2px solid #ffffe2;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 24px;
+  transition: transform 0.3s ease;
+  background-color: #ffffe2;
+  padding: 0;
+}
+
+.about-person:hover .about-image-wrapper {
+  transform: rotate(-2deg) scale(1.02);
+}
+
+.about-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-name {
+  font-family: 'Khand', sans-serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: #ffffe2;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.about-role {
+  font-family: 'Array', sans-serif;
+  font-size: 14px;
+  color: #c0c0c0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 20px;
+}
+
+.about-description {
+  font-family: 'Array', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #c0c0c0;
+  max-width: 400px;
+}
+
+/* ============================================
    RESPONSIVE DESIGN
    ============================================ */
 @media (max-width: 768px) {
@@ -311,6 +420,34 @@
     font-size: 18px;
     padding: 20px;
   }
+
+  /* About section responsive */
+  .flow-about {
+    padding: 40px 20px;
+  }
+
+  .flow-about-title {
+    font-size: 36px;
+    margin-bottom: 40px;
+  }
+
+  .flow-about-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .about-image-wrapper {
+    width: 150px;
+    height: 150px;
+  }
+
+  .about-name {
+    font-size: 28px;
+  }
+
+  .about-description {
+    font-size: 15px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -368,6 +505,330 @@
 
   .timeline-header {
     padding: 16px 0;
+  }
+
+  /* About section responsive */
+  .flow-about {
+    padding: 35px 20px;
+  }
+
+  .flow-about-title {
+    font-size: 32px;
+    margin-bottom: 35px;
+  }
+
+  .about-image-wrapper {
+    width: 130px;
+    height: 130px;
+  }
+
+  .about-name {
+    font-size: 24px;
+  }
+
+  .about-role {
+    font-size: 13px;
+  }
+
+  .about-description {
+    font-size: 14px;
+  }
+}
+
+/* ============================================
+   VALUE CALCULATOR SECTION
+   ============================================ */
+.flow-value {
+  padding: 60px 20px;
+  background-color: #ffffe2;
+}
+
+.flow-value-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.flow-value-title {
+  font-family: 'Khand', sans-serif;
+  font-size: 48px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.flow-value-subtitle {
+  font-family: 'Array', sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #4a4a4a;
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 48px;
+}
+
+.flow-value-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.value-card {
+  background-color: #1a1a1a;
+  border-radius: 16px;
+  padding: 48px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 320px;
+  transition: transform 0.3s ease;
+}
+
+.value-card:hover {
+  transform: translateY(-3px);
+}
+
+.value-number {
+  font-family: 'Array', sans-serif;
+  font-size: 56px;
+  font-weight: 400;
+  color: #ffffe2;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.value-card:nth-child(3) .value-number {
+  font-size: 48px;
+}
+
+.value-label {
+  font-family: 'Array', sans-serif;
+  font-size: 13px;
+  color: #ffffe2;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.value-slider-wrapper {
+  width: 100%;
+}
+
+.value-slider-wrapper .inline-slider-container {
+  width: 100% !important;
+  margin: 0;
+}
+
+.value-slider-wrapper .slider-display-value,
+.value-slider-wrapper .slider-suffix {
+  display: none;
+}
+
+/* Calculate/Result Card */
+.value-card-result {
+  cursor: pointer;
+  position: relative;
+  justify-content: center;
+}
+
+.value-card-result:not(.calculated):active {
+  transform: translateY(-3px) scale(0.98);
+}
+
+.value-result-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.value-calculate {
+  font-family: 'Khand', sans-serif;
+  font-size: 36px;
+  font-weight: 400;
+  color: #ffffe2;
+  letter-spacing: 0.02em;
+  text-align: center;
+  animation: fadeInCalculate 0.4s ease forwards;
+}
+
+@keyframes fadeInCalculate {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.value-result-number {
+  font-family: 'Array', sans-serif;
+  font-size: 56px;
+  font-weight: 400;
+  color: #ffffe2;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: fadeInResult 0.5s ease forwards;
+}
+
+.value-result-label {
+  font-family: 'Array', sans-serif;
+  font-size: 13px;
+  color: #ffffe2;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: center;
+  opacity: 0;
+  animation: fadeInResult 0.5s ease 0.1s forwards;
+}
+
+@keyframes fadeInResult {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.value-card-result.calculated {
+  cursor: default;
+}
+
+.flow-value-text {
+  font-family: 'Array', sans-serif;
+  font-size: 18px;
+  line-height: 1.7;
+  color: #1a1a1a;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .flow-value-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .flow-value {
+    padding: 50px 20px;
+  }
+
+  .flow-value-title {
+    font-size: 36px;
+    margin-bottom: 14px;
+  }
+
+  .flow-value-subtitle {
+    font-size: 17px;
+    margin-bottom: 36px;
+  }
+
+  .flow-value-cards {
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  .value-card {
+    padding: 36px 24px;
+    min-height: 280px;
+  }
+
+  .value-number {
+    font-size: 52px;
+  }
+
+  .value-card:nth-child(3) .value-number {
+    font-size: 44px;
+  }
+
+  .value-result-number {
+    font-size: 52px;
+  }
+
+  .value-label,
+  .value-result-label {
+    font-size: 12px;
+    margin-bottom: 14px;
+  }
+
+  .value-calculate {
+    font-size: 32px;
+  }
+
+  .flow-value-text {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 480px) {
+  .flow-value {
+    padding: 40px 20px;
+  }
+
+  .flow-value-title {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .flow-value-subtitle {
+    font-size: 16px;
+    margin-bottom: 32px;
+  }
+
+  .flow-value-cards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .value-card {
+    padding: 32px 24px;
+    min-height: 260px;
+  }
+
+  .value-number {
+    font-size: 48px;
+  }
+
+  .value-card:nth-child(3) .value-number {
+    font-size: 40px;
+  }
+
+  .value-result-number {
+    font-size: 48px;
+  }
+
+  .value-label,
+  .value-result-label {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  .value-calculate {
+    font-size: 28px;
+  }
+
+  .flow-value-text {
+    font-size: 16px;
   }
 }
 
