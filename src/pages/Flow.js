@@ -124,6 +124,11 @@ const Flow = () => {
     setExpandedPhase(expandedPhase === phaseId ? null : phaseId);
   };
 
+  // Format currency for display - shows full number with commas
+  const formatCurrency = (value) => {
+    return value.toLocaleString('en-US');
+  };
+
   return (
     <div className="flow">
       <Header />
@@ -266,9 +271,9 @@ const Flow = () => {
               </div>
             </div>
 
-            {/* Card 3: Salary */}
+            {/* Card 3: Salary - Now shows full number */}
             <div className="value-card">
-              <div className="value-number">${(salary/1000).toFixed(0)}k</div>
+              <div className="value-number">${formatCurrency(salary)}</div>
               <div className="value-label">Average Salary</div>
               <div className="value-slider-wrapper">
                 <Slider
@@ -287,11 +292,15 @@ const Flow = () => {
               </div>
             </div>
 
-            {/* Card 4: Calculate/Result */}
+            {/* Card 4: Calculate/Result - Smooth expansion animation */}
             <div 
               className={`value-card value-card-result ${showResult ? 'calculated' : ''}`}
               onClick={() => {
                 if (!showResult) {
+                  // Calculation:
+                  // hourlyRate = annual salary / 2000 work hours per year (50 weeks × 40 hours)
+                  // totalHours = employees × hours per week × 52 weeks
+                  // annualCost = totalHours × hourlyRate
                   const hourlyRate = salary / 2000;
                   const totalHours = employees * hours * 52;
                   const annualCost = Math.round(totalHours * hourlyRate);
@@ -305,7 +314,7 @@ const Flow = () => {
                   <div className="value-calculate">Calculate</div>
                 ) : (
                   <>
-                    <div className="value-result-number">${(result/1000).toFixed(0)}k</div>
+                    <div className="value-result-number" key={result}>${formatCurrency(result)}</div>
                     <div className="value-result-label">Annual Value</div>
                   </>
                 )}
