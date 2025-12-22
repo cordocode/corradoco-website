@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 import ReactMarkdown from 'react-markdown';
 import './Blog.css';
@@ -13,7 +14,11 @@ const supabase = createClient(
 );
 
 const Blog = () => {
+  const { slug } = useParams(); // Get slug from URL
+  const navigate = useNavigate();
+  
   const [posts, setPosts] = useState([]);
+  const [featuredPost, setFeaturedPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
@@ -25,7 +30,8 @@ const Blog = () => {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    published: false
+    published: false,
+    featured: false
   });
 
   const fetchPosts = useCallback(async () => {
@@ -43,11 +49,50 @@ const Blog = () => {
 
       if (error) throw error;
 
-      setPosts(data || []);
+      // Separate featured post from regular posts
+      const allPosts = data || [];
+      const featured = allPosts.find(post => post.featured === true);
+      const regular = allPosts.filter(post => post.featured !== true);
+      
+      setFeaturedPost(featured || null);
+      setPosts(regular);
     } catch (error) {
       console.error('Error fetching posts:', error);
     } finally {
       setLoading(false);
+    }
+  }, [isAdmin]);
+
+  // Fetch single post by slug
+  const fetchPostBySlug = useCallback(async (postSlug) => {
+    try {
+      let query = supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('slug', postSlug)
+        .single();
+      
+      if (!isAdmin) {
+        query = supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('slug', postSlug)
+          .eq('published', true)
+          .single();
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error('Error fetching post:', error);
+        setSelectedPost(null);
+        return;
+      }
+
+      setSelectedPost(data);
+    } catch (error) {
+      console.error('Error fetching post:', error);
+      setSelectedPost(null);
     }
   }, [isAdmin]);
 
@@ -64,6 +109,15 @@ const Blog = () => {
     
     fetchPosts();
   }, [isAdmin, fetchPosts]);
+
+  // Handle URL slug changes
+  useEffect(() => {
+    if (slug) {
+      fetchPostBySlug(slug);
+    } else {
+      setSelectedPost(null);
+    }
+  }, [slug, fetchPostBySlug]);
 
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
@@ -82,7 +136,7 @@ const Blog = () => {
   const handleLogout = () => {
     setIsAdmin(false);
     sessionStorage.removeItem('blog_admin_auth');
-    window.location.href = '/blog';
+    navigate('/blog');
   };
 
   const generateSlug = (title) => {
@@ -94,21 +148,21 @@ const Blog = () => {
 
   const handleCreateNew = () => {
     setCreatingNew(true);
-    setSelectedPost(null);
     setFormData({
       title: '',
       content: '',
-      published: false
+      published: false,
+      featured: false
     });
   };
 
   const handleEdit = (post) => {
     setEditingPost(post.id);
-    setSelectedPost(null);
     setFormData({
       title: post.title,
       content: post.content,
-      published: post.published
+      published: post.published,
+      featured: post.featured || false
     });
   };
 
@@ -118,7 +172,8 @@ const Blog = () => {
     setFormData({
       title: '',
       content: '',
-      published: false
+      published: false,
+      featured: false
     });
   };
 
@@ -129,12 +184,22 @@ const Blog = () => {
     }
 
     try {
-      const slug = generateSlug(formData.title);
+      const postSlug = generateSlug(formData.title);
+      
+      // If this post is being set as featured, unfeature all other posts first
+      if (formData.featured) {
+        await supabase
+          .from('blog_posts')
+          .update({ featured: false })
+          .neq('id', editingPost || '');
+      }
+      
       const postData = {
         title: formData.title,
-        slug: slug,
+        slug: postSlug,
         content: formData.content,
         published: formData.published,
+        featured: formData.featured,
         published_at: formData.published ? new Date().toISOString() : null
       };
 
@@ -174,7 +239,7 @@ const Blog = () => {
 
       if (error) throw error;
 
-      setSelectedPost(null);
+      navigate('/blog');
       fetchPosts();
     } catch (error) {
       console.error('Error deleting post:', error);
@@ -200,22 +265,22 @@ const Blog = () => {
 
   const handleCardClick = (post) => {
     if (!isAdmin || (!editingPost && !creatingNew)) {
-      setSelectedPost(post);
+      navigate(`/blog/${post.slug}`);
     }
   };
 
   const handleBackToList = () => {
-    setSelectedPost(null);
+    navigate('/blog');
   };
 
-  // Custom markdown components for styling
+  // Custom markdown components for styling - FONTS SWAPPED
   const markdownComponents = {
-    h2: ({node, children, ...props}) => <h2 style={{fontFamily: 'Khand, sans-serif', fontSize: '36px', fontWeight: '400', marginTop: '48px', marginBottom: '24px', letterSpacing: '0.02em'}} {...props}>{children}</h2>,
-    h3: ({node, children, ...props}) => <h3 style={{fontFamily: 'Khand, sans-serif', fontSize: '28px', fontWeight: '400', marginTop: '36px', marginBottom: '20px', letterSpacing: '0.02em'}} {...props}>{children}</h3>,
-    p: ({node, ...props}) => <p style={{marginBottom: '24px', lineHeight: '1.5'}} {...props} />,
+    h2: ({node, children, ...props}) => <h2 style={{fontFamily: 'Array, sans-serif', fontSize: '32px', fontWeight: '400', marginTop: '48px', marginBottom: '24px', letterSpacing: '0.02em'}} {...props}>{children}</h2>,
+    h3: ({node, children, ...props}) => <h3 style={{fontFamily: 'Array, sans-serif', fontSize: '24px', fontWeight: '400', marginTop: '36px', marginBottom: '20px', letterSpacing: '0.02em'}} {...props}>{children}</h3>,
+    p: ({node, ...props}) => <p style={{marginBottom: '24px', lineHeight: '1.7'}} {...props} />,
     ul: ({node, ...props}) => <ul style={{marginLeft: '24px', marginBottom: '24px'}} {...props} />,
     ol: ({node, ...props}) => <ol style={{marginLeft: '24px', marginBottom: '24px'}} {...props} />,
-    li: ({node, ...props}) => <li style={{marginBottom: '12px', lineHeight: '1.5'}} {...props} />,
+    li: ({node, ...props}) => <li style={{marginBottom: '12px', lineHeight: '1.7'}} {...props} />,
     strong: ({node, ...props}) => <strong style={{fontWeight: '600'}} {...props} />,
     blockquote: ({node, ...props}) => (
       <blockquote style={{
@@ -228,13 +293,34 @@ const Blog = () => {
     ),
   };
 
-  // If viewing a single post
-  if (selectedPost && !isAdmin) {
+  // If viewing a single post (via URL slug)
+  if (selectedPost && !editingPost) {
     return (
       <div className="blog">
         <Header />
         
+        {/* Black Header Strip */}
+        <div className="blog-header-strip">
+          <div className="blog-header-strip-container">
+            <h1 className="blog-header-strip-title">The Corrado Blog</h1>
+            <p className="blog-header-strip-subtitle">Our Journey to Breaking the 9-5</p>
+          </div>
+        </div>
+        
         <section className="blog-content">
+          {isAdmin && (
+            <div className="blog-container">
+              <div className="admin-header">
+                <button className="admin-new-post" onClick={handleCreateNew}>
+                  + New Post
+                </button>
+                <button className="admin-logout" onClick={handleLogout}>
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="single-post-view">
             <div className="single-post-back" onClick={handleBackToList}>
               ← Back to Blog
@@ -246,6 +332,9 @@ const Blog = () => {
                 <span className="single-post-date">
                   {formatDate(selectedPost.published_at)}
                 </span>
+                {isAdmin && !selectedPost.published && (
+                  <span className="post-draft-badge">DRAFT</span>
+                )}
               </div>
             </div>
 
@@ -254,73 +343,8 @@ const Blog = () => {
                 {selectedPost.content}
               </ReactMarkdown>
             </div>
-          </div>
-        </section>
 
-        {/* CTA Section */}
-        <section className="blog-cta">
-          <div className="blog-cta-container">
-            <h2 className="blog-cta-title">Ready to Reclaim Your Team's Time?</h2>
-            <p className="blog-cta-subtitle">
-              See how automation works in your specific business. Free process audit included.
-            </p>
-            <button className="blog-cta-button" onClick={() => setIsModalOpen(true)}>
-              Book Your Discovery Call
-            </button>
-          </div>
-        </section>
-
-        <Footer />
-
-        <Modal 
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          subtitle="See how automation works in your specific business. Free process audit included."
-        />
-      </div>
-    );
-  }
-
-  // If admin is viewing a single post
-  if (selectedPost && isAdmin && !editingPost) {
-    return (
-      <div className="blog">
-        <Header />
-        
-        <section className="blog-content">
-          <div className="blog-container">
-            <div className="admin-header">
-              <button className="admin-new-post" onClick={handleCreateNew}>
-                + New Post
-              </button>
-              <button className="admin-logout" onClick={handleLogout}>
-                Logout
-              </button>
-            </div>
-
-            <div className="single-post-view">
-              <div className="single-post-back" onClick={handleBackToList}>
-                ← Back to Blog
-              </div>
-
-              <div className="single-post-header">
-                <h1 className="single-post-title">{selectedPost.title}</h1>
-                <div className="single-post-meta">
-                  <span className="single-post-date">
-                    {formatDate(selectedPost.published_at)}
-                  </span>
-                  {!selectedPost.published && (
-                    <span className="post-draft-badge">DRAFT</span>
-                  )}
-                </div>
-              </div>
-
-              <div className="single-post-content">
-                <ReactMarkdown components={markdownComponents}>
-                  {selectedPost.content}
-                </ReactMarkdown>
-              </div>
-
+            {isAdmin && (
               <div className="post-admin-actions">
                 <button 
                   onClick={() => handleEdit(selectedPost)} 
@@ -335,7 +359,7 @@ const Blog = () => {
                   Delete
                 </button>
               </div>
-            </div>
+            )}
           </div>
         </section>
 
@@ -363,9 +387,18 @@ const Blog = () => {
     );
   }
 
+  // Blog listing view
   return (
     <div className="blog">
       <Header />
+      
+      {/* Black Header Strip */}
+      <div className="blog-header-strip">
+        <div className="blog-header-strip-container">
+          <h1 className="blog-header-strip-title">The Corrado Blog</h1>
+          <p className="blog-header-strip-subtitle">Our Journey to Breaking the 9-5</p>
+        </div>
+      </div>
       
       {showPasswordPrompt && (
         <div className="admin-modal-overlay">
@@ -388,7 +421,7 @@ const Blog = () => {
                   type="button" 
                   onClick={() => {
                     setShowPasswordPrompt(false);
-                    window.location.href = '/blog';
+                    navigate('/blog');
                   }}
                   className="admin-button-cancel"
                 >
@@ -434,14 +467,24 @@ const Blog = () => {
                 <strong>Markdown Tips:</strong> **bold**, *italic*, ## Section Header, ### Subheader, - bullet, 1. numbered
               </div>
               <div className="form-actions">
-                <label className="form-checkbox">
-                  <input
-                    type="checkbox"
-                    checked={formData.published}
-                    onChange={(e) => setFormData({...formData, published: e.target.checked})}
-                  />
-                  <span>Publish immediately</span>
-                </label>
+                <div className="form-checkboxes">
+                  <label className="form-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={formData.published}
+                      onChange={(e) => setFormData({...formData, published: e.target.checked})}
+                    />
+                    <span>Publish immediately</span>
+                  </label>
+                  <label className="form-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={formData.featured}
+                      onChange={(e) => setFormData({...formData, featured: e.target.checked})}
+                    />
+                    <span>Set as Featured Post</span>
+                  </label>
+                </div>
                 <div className="form-buttons">
                   <button onClick={handleSavePost} className="form-button-save">
                     Save Post
@@ -475,14 +518,24 @@ const Blog = () => {
                 <strong>Markdown Tips:</strong> **bold**, *italic*, ## Section Header, ### Subheader, - bullet, 1. numbered
               </div>
               <div className="form-actions">
-                <label className="form-checkbox">
-                  <input
-                    type="checkbox"
-                    checked={formData.published}
-                    onChange={(e) => setFormData({...formData, published: e.target.checked})}
-                  />
-                  <span>Published</span>
-                </label>
+                <div className="form-checkboxes">
+                  <label className="form-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={formData.published}
+                      onChange={(e) => setFormData({...formData, published: e.target.checked})}
+                    />
+                    <span>Published</span>
+                  </label>
+                  <label className="form-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={formData.featured}
+                      onChange={(e) => setFormData({...formData, featured: e.target.checked})}
+                    />
+                    <span>Set as Featured Post</span>
+                  </label>
+                </div>
                 <div className="form-buttons">
                   <button onClick={handleSavePost} className="form-button-save">
                     Save Changes
@@ -509,35 +562,71 @@ const Blog = () => {
               </p>
             </div>
           ) : (
-            <div className="blog-posts-grid">
-              {posts.map((post) => (
-                <div 
-                  key={post.id} 
-                  className="blog-card"
-                  onClick={() => handleCardClick(post)}
-                >
-                  <div className="blog-card-content">
-                    <div className="blog-card-header">
-                      <h2 className="blog-card-title">
-                        {post.title}
-                        {isAdmin && !post.published && (
-                          <span className="post-draft-badge">DRAFT</span>
-                        )}
-                      </h2>
-                      <span className="blog-card-date">
-                        {formatDate(post.published_at)}
+            <>
+              {/* Featured Post Section */}
+              {featuredPost && (
+                <div className="blog-featured-section">
+                  <span className="featured-label">Featured</span>
+                  <div 
+                    className="blog-featured-card"
+                    onClick={() => handleCardClick(featuredPost)}
+                  >
+                    <div className="blog-featured-content">
+                      <div className="blog-featured-header">
+                        <h2 className="blog-featured-title">
+                          {featuredPost.title}
+                          {isAdmin && !featuredPost.published && (
+                            <span className="post-draft-badge">DRAFT</span>
+                          )}
+                        </h2>
+                        <span className="blog-featured-date">
+                          {formatDate(featuredPost.published_at)}
+                        </span>
+                      </div>
+                      <p className="blog-featured-excerpt">
+                        {createExcerpt(featuredPost.content, 300)}
+                      </p>
+                      <span className="blog-featured-read-more">
+                        Read More →
                       </span>
                     </div>
-                    <p className="blog-card-excerpt">
-                      {createExcerpt(post.content)}
-                    </p>
-                    <span className="blog-card-read-more">
-                      Read More →
-                    </span>
                   </div>
                 </div>
-              ))}
-            </div>
+              )}
+
+              {/* Regular Posts Grid */}
+              {posts.length > 0 && (
+                <div className="blog-posts-grid">
+                  {posts.map((post) => (
+                    <div 
+                      key={post.id} 
+                      className="blog-card"
+                      onClick={() => handleCardClick(post)}
+                    >
+                      <div className="blog-card-content">
+                        <div className="blog-card-header">
+                          <h2 className="blog-card-title">
+                            {post.title}
+                            {isAdmin && !post.published && (
+                              <span className="post-draft-badge">DRAFT</span>
+                            )}
+                          </h2>
+                          <span className="blog-card-date">
+                            {formatDate(post.published_at)}
+                          </span>
+                        </div>
+                        <p className="blog-card-excerpt">
+                          {createExcerpt(post.content)}
+                        </p>
+                        <span className="blog-card-read-more">
+                          Read More →
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
