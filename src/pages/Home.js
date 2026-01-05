@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Home.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import Slider from '../components/Slider';
 import Modal from '../components/Modal';
 import BIRDS from 'vanta/dist/vanta.birds.min';
 // NOTE: Three.js loaded via CDN in index.html
@@ -49,70 +48,32 @@ const Home = () => {
     setIsModalOpen(true);
   };
 
-  // ============ GENERATE DYNAMIC SUBTITLE FROM CONVERSATION ============
-  const getConversationSubtitle = () => {
-    const userMessages = messages.filter(m => m.type === 'user');
-    
-    if (userMessages.length === 0) {
-      return "Let's discuss your automation needs in detail.";
-    }
-    
-    const lastUserMessage = userMessages[userMessages.length - 1]?.content || '';
-    const lowercaseMessage = lastUserMessage.toLowerCase();
-    
-    if (lowercaseMessage.includes('email') || lowercaseMessage.includes('scheduling')) {
-      return "Let's explore your email scheduling automation in detail.";
-    } else if (lowercaseMessage.includes('invoice') || lowercaseMessage.includes('billing')) {
-      return "Let's discuss your invoice processing automation.";
-    } else if (lowercaseMessage.includes('submittal') || lowercaseMessage.includes('rfp') || lowercaseMessage.includes('proposal')) {
-      return "Let's dive into your submittal process automation.";
-    } else if (lowercaseMessage.includes('document') || lowercaseMessage.includes('file')) {
-      return "Let's explore your document management automation.";
-    } else if (userMessages.length === 1 && lastUserMessage.length < 30) {
-      return "Let's gather more details about your current processes.";
-    } else if (userMessages.length > 2) {
-      return "Let's continue this conversation on a call.";
-    }
-    
-    return "Let's discuss your automation needs in detail.";
-  };
-
-  // ============ CHATBOX STATE ============
-  const [hoursPerWeek, setHoursPerWeek] = useState(5);
-  const [employees, setEmployees] = useState(2);
-  const [avgSalary, setAvgSalary] = useState(85000);
-  const [chatStarted, setChatStarted] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [inputText, setInputText] = useState('');
-  const [showArrow, setShowArrow] = useState(false);
-  const [isStreaming, setIsStreaming] = useState(false);
-  const [conversationHistory, setConversationHistory] = useState([]);
-
   // ============ PARTNERS CAROUSEL STATE ============
   const scrollRef = useRef(null);
   
+  // Reordered: procore and autodesk near the beginning
   const logos = [
-    { id: 1, src: fleetAdvisor, alt: 'Fleet Advisor', name: 'fleet-advisor' },
-    { id: 2, src: vwco, alt: 'VWCO', name: 'vwco' },
-    { id: 3, src: norcon, alt: 'Norcon', name: 'norcon' },
-    { id: 4, src: reliant, alt: 'Reliant', name: 'reliant' },
-    { id: 5, src: autodesk, alt: 'Autodesk', name: 'autodesk' },
-    { id: 6, src: chatgpt, alt: 'ChatGPT', name: 'chatgpt' },
-    { id: 7, src: claude, alt: 'Claude', name: 'claude' },
-    { id: 8, src: cmic, alt: 'CMiC', name: 'cmic' },
-    { id: 9, src: microsoft, alt: 'Microsoft', name: 'microsoft' },
-    { id: 10, src: procore, alt: 'Procore', name: 'procore' },
+    { id: 1, src: procore, alt: 'Procore', name: 'procore' },
+    { id: 2, src: autodesk, alt: 'Autodesk', name: 'autodesk' },
+    { id: 3, src: fleetAdvisor, alt: 'Fleet Advisor', name: 'fleet-advisor' },
+    { id: 4, src: vwco, alt: 'VWCO', name: 'vwco' },
+    { id: 5, src: norcon, alt: 'Norcon', name: 'norcon' },
+    { id: 6, src: reliant, alt: 'Reliant', name: 'reliant' },
+    { id: 7, src: chatgpt, alt: 'ChatGPT', name: 'chatgpt' },
+    { id: 8, src: claude, alt: 'Claude', name: 'claude' },
+    { id: 9, src: cmic, alt: 'CMiC', name: 'cmic' },
+    { id: 10, src: microsoft, alt: 'Microsoft', name: 'microsoft' },
     // Duplicates for seamless carousel loop
-    { id: 11, src: fleetAdvisor, alt: 'Fleet Advisor', name: 'fleet-advisor' },
-    { id: 12, src: vwco, alt: 'VWCO', name: 'vwco' },
-    { id: 13, src: norcon, alt: 'Norcon', name: 'norcon' },
-    { id: 14, src: reliant, alt: 'Reliant', name: 'reliant' },
-    { id: 15, src: autodesk, alt: 'Autodesk', name: 'autodesk' },
-    { id: 16, src: chatgpt, alt: 'ChatGPT', name: 'chatgpt' },
-    { id: 17, src: claude, alt: 'Claude', name: 'claude' },
-    { id: 18, src: cmic, alt: 'CMiC', name: 'cmic' },
-    { id: 19, src: microsoft, alt: 'Microsoft', name: 'microsoft' },
-    { id: 20, src: procore, alt: 'Procore', name: 'procore' },
+    { id: 11, src: procore, alt: 'Procore', name: 'procore' },
+    { id: 12, src: autodesk, alt: 'Autodesk', name: 'autodesk' },
+    { id: 13, src: fleetAdvisor, alt: 'Fleet Advisor', name: 'fleet-advisor' },
+    { id: 14, src: vwco, alt: 'VWCO', name: 'vwco' },
+    { id: 15, src: norcon, alt: 'Norcon', name: 'norcon' },
+    { id: 16, src: reliant, alt: 'Reliant', name: 'reliant' },
+    { id: 17, src: chatgpt, alt: 'ChatGPT', name: 'chatgpt' },
+    { id: 18, src: claude, alt: 'Claude', name: 'claude' },
+    { id: 19, src: cmic, alt: 'CMiC', name: 'cmic' },
+    { id: 20, src: microsoft, alt: 'Microsoft', name: 'microsoft' },
   ];
 
   // ============ AI INTEGRATION BOXES DATA ============
@@ -194,195 +155,6 @@ const Home = () => {
     };
   }, [vantaEffect]);
 
-  // ============ STREAMING API CALL FUNCTION ============
-  const callStreamingAPI = async (userMessage, isInitial = false, calculatedValue = null, sliderValues = null) => {
-    try {
-      setIsStreaming(true);
-      
-      let messagesToSend;
-      
-      if (isInitial) {
-        messagesToSend = [
-          {
-            role: 'user',
-            content: userMessage
-          }
-        ];
-      } else {
-        messagesToSend = [
-          ...conversationHistory,
-          {
-            role: 'user',
-            content: userMessage
-          }
-        ];
-      }
-
-      const aiMessageId = Date.now() + Math.random();
-      
-      setMessages(prev => [...prev, { 
-        id: aiMessageId,
-        type: 'ai', 
-        content: '', 
-        isTyping: true 
-      }]);
-
-      const apiUrl = process.env.NODE_ENV === 'production' 
-        ? '/api/chat' 
-        : 'http://localhost:5001/api/chat';
-
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          messages: messagesToSend,
-          automationValue: calculatedValue,
-          sliderData: sliderValues
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('API request failed');
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let aiResponse = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        
-        if (done) break;
-        
-        const chunk = decoder.decode(value);
-        const lines = chunk.split('\n');
-        
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const data = line.slice(6);
-            
-            if (data === '[DONE]') {
-              setIsStreaming(false);
-              break;
-            }
-            
-            try {
-              const parsed = JSON.parse(data);
-              if (parsed.content) {
-                const contentToAdd = parsed.content;
-                aiResponse += contentToAdd;
-                
-                const currentResponse = aiResponse;
-                
-                setMessages(prev => {
-                  return prev.map(msg => 
-                    msg.id === aiMessageId 
-                      ? { ...msg, content: currentResponse, isTyping: true }
-                      : msg
-                  );
-                });
-              }
-            } catch (e) {
-              // Ignore parse errors
-            }
-          }
-        }
-      }
-      
-      const hasScheduleButton = aiResponse.includes('[SCHEDULE_CALL]');
-      const cleanedResponse = aiResponse.replace('[SCHEDULE_CALL]', '').trim();
-      
-      setMessages(prev => prev.map(msg =>
-        msg.id === aiMessageId
-          ? { ...msg, content: cleanedResponse, isTyping: false, showScheduleButton: hasScheduleButton }
-          : msg
-      ));
-      
-      setConversationHistory(prev => [
-        ...prev,
-        { role: 'user', content: userMessage },
-        { role: 'assistant', content: cleanedResponse }
-      ]);
-      
-    } catch (error) {
-      console.error('Error calling API:', error);
-      setMessages(prev => [...prev, {
-        id: Date.now() + Math.random(),
-        type: 'ai',
-        content: 'Sorry, I encountered an error. Please try again.',
-        isTyping: false
-      }]);
-    } finally {
-      setIsStreaming(false);
-    }
-  };
-
-  // ============ CHATBOX FUNCTIONS ============
-  const handleSliderChange = (setter) => (value) => {
-    setter(value);
-    if (!chatStarted) {
-      setShowArrow(true);
-    }
-  };
-  
-  const handleSendMessage = async () => {
-    setShowArrow(false);
-    
-    if (!chatStarted) {
-      const hoursPerYear = hoursPerWeek * 52;
-      const hourlyRate = avgSalary / 2080;
-      const totalValue = Math.round(hoursPerYear * employees * hourlyRate);
-      
-      setChatStarted(true);
-      
-      const initialMessage = `I want to explore automating a process that could save ${hoursPerWeek} hours per week for ${employees} ${employees === 1 ? 'employee' : 'employees'} making $${avgSalary.toLocaleString()} per year.`;
-      
-      const sliderValues = {
-        hoursPerWeek,
-        employees,
-        avgSalary
-      };
-      
-      await callStreamingAPI(initialMessage, true, totalValue, sliderValues);
-      
-    } else if (inputText.trim() && !isStreaming) {
-      const userMessage = inputText;
-      
-      setInputText('');
-      
-      setMessages(prev => [...prev, { 
-        id: Date.now() + Math.random(),
-        type: 'user', 
-        content: userMessage 
-      }]);
-      
-      await callStreamingAPI(userMessage, false, null, null);
-    }
-  };
-  
-  const handleRefresh = () => {
-    setChatStarted(false);
-    setMessages([]);
-    setConversationHistory([]);
-    setHoursPerWeek(5);
-    setEmployees(2);
-    setAvgSalary(85000);
-    setShowArrow(false);
-    setIsStreaming(false);
-  };
-  
-  const salaryInThousands = Math.round(avgSalary / 1000);
-  
-  const handleSalaryChange = (value) => {
-    const thousands = value;
-    setAvgSalary(thousands * 1000);
-    if (!chatStarted) {
-      setShowArrow(true);
-    }
-  };
-
   // ============ PARTNERS CAROUSEL EFFECT ============
   useEffect(() => {
     const scrollContainer = scrollRef.current;
@@ -438,7 +210,8 @@ const Home = () => {
       <section className="hero" ref={vantaRef}>
         <div className="hero-container">
           <h1 className="hero-headline">
-            Eliminating the Work People Hate.
+            Eliminating the Work<br />
+            Contractors <span className="hate-emphasis">Hate.</span>
           </h1>
           <p className="hero-subheadline">
             We help you identify, design, and build tailored automations by integrating the tools you already have into value adding solutions.
@@ -449,109 +222,10 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CHATBOX SECTION */}
-      <section className={`chatbox-section ${chatStarted ? 'expanded' : ''}`}>
-        <div className="chatbox-container">
-          <div className="chatbox-header">
-            <h2 className="chatbox-title">Unlock Your Team's Potential</h2>
-            <p className="chatbox-subtitle">Use our interactive tool to see the annual value hidden in your manual processes</p>
-          </div>
-          <div className="chat-window-wrapper">
-            {!chatStarted && (
-              <div className="chat-instruction">
-                **Adjust the sliders to calculate**
-              </div>
-            )}
-            <div className={`chat-window ${chatStarted ? 'expanded' : ''}`}>
-              <div className={`messages-area ${chatStarted ? 'expanded' : ''}`}>
-              <div className="message ai-message pre-filled">
-                <span className="message-label">AI:</span>
-                <span className="message-content">
-                  Imagine automating a process that saves
-                  <Slider
-                    value={hoursPerWeek}
-                    onChange={handleSliderChange(setHoursPerWeek)}
-                    min={0}
-                    max={10}
-                    step={1}
-                    width="100px"
-                    suffix="hours per week for"
-                    disabled={chatStarted}
-                  />
-                  <Slider
-                    value={employees}
-                    onChange={handleSliderChange(setEmployees)}
-                    min={1}
-                    max={100}
-                    step={1}
-                    width="90px"
-                    suffix="employees who make about $"
-                    disabled={chatStarted}
-                  />
-                  <Slider
-                    value={salaryInThousands}
-                    onChange={handleSalaryChange}
-                    min={35}
-                    max={250}
-                    step={5}
-                    width="100px"
-                    displayValue={`${salaryInThousands}k`}
-                    suffix="per year."
-                    disabled={chatStarted}
-                  />
-                </span>
-              </div>
-              
-              {messages.map((message) => (
-                <div key={message.id} className={`message ${message.type}-message ${message.isTyping ? 'typing' : ''}`}>
-                  <span className="message-label">{message.type === 'ai' ? 'AI:' : 'You:'}</span>
-                  <span className="message-content">{message.content}</span>
-                  {message.showScheduleButton && (
-                    <button 
-                      className="inline-schedule-button"
-                      onClick={() => openModal(getConversationSubtitle())}
-                    >
-                      Schedule a Call
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-            
-            <div className="chat-input-container">
-              <input
-                type="text"
-                className="chat-input"
-                placeholder={chatStarted ? "Type your message..." : "Click send to calculate value"}
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && !isStreaming && handleSendMessage()}
-                disabled={!chatStarted || isStreaming}
-              />
-              <button 
-                className={`send-button ${chatStarted ? 'rotate' : ''}`} 
-                onClick={handleSendMessage}
-                disabled={isStreaming}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M12 19V5M5 12l7-7 7 7" />
-                </svg>
-              </button>
-              {showArrow && !chatStarted && (
-                <div className="send-arrow">
-                  →
-                </div>
-              )}
-              {chatStarted && (
-                <button className="refresh-button" onClick={handleRefresh} disabled={isStreaming}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
-                  </svg>
-                </button>
-              )}
-            </div>
-            </div>
-          </div>
+      {/* PLACEHOLDER SECTION */}
+      <section className="placeholder-section">
+        <div className="placeholder-container">
+          <h2 className="placeholder-title">Unlock Your Team's Potential</h2>
         </div>
       </section>
 
@@ -612,10 +286,17 @@ const Home = () => {
             
             <div className="partners-carousel">
               <div className="partners-track" ref={scrollRef}>
+                {/* 
+                  #explanation: The 'logo-cmic' class is conditionally applied below because 
+                  the CMiC logo SVG is much larger/bolder than other partner logos, causing it 
+                  to visually overpower the carousel. The class scales it down to match the 
+                  visual weight of other logos while preserving consistent wrapper spacing.
+                  See .logo-cmic in Home.css for the sizing rule.
+                */}
                 {logos.map((logo) => (
                   <div 
                     key={logo.id} 
-                    className="partner-logo-wrapper"
+                    className={`partner-logo-wrapper ${logo.name === 'cmic' ? 'logo-cmic' : ''}`}
                     onClick={() => handleLogoClick(logo.name)}
                   >
                     <img 
@@ -642,10 +323,6 @@ const Home = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         subtitle={modalSubtitle}
-        conversationData={{
-          messages: messages,
-          automationValue: chatStarted ? Math.round((hoursPerWeek * 52 * employees * (avgSalary / 2080))) : null
-        }}
       />
     </div>
   );
