@@ -12,6 +12,12 @@ import fleetAdvisor from '../assets/customer-logos/fleet_advisor.svg';
 import vwco from '../assets/customer-logos/vwco.svg';
 import norcon from '../assets/customer-logos/norcon.svg';
 import reliant from '../assets/customer-logos/reliant.svg';
+import autodesk from '../assets/customer-logos/autodesk.svg';
+import chatgpt from '../assets/customer-logos/chatgpt.svg';
+import claude from '../assets/customer-logos/claude.svg';
+import cmic from '../assets/customer-logos/cmic.svg';
+import microsoft from '../assets/customer-logos/microsoft.svg';
+import procore from '../assets/customer-logos/procore.svg';
 
 // Import AI Integration icons and illustrations as URLs
 import iconInternalKnowledge from '../assets/Icon_Internal Knowledge Assistant.svg?url';
@@ -90,10 +96,23 @@ const Home = () => {
     { id: 2, src: vwco, alt: 'VWCO', name: 'vwco' },
     { id: 3, src: norcon, alt: 'Norcon', name: 'norcon' },
     { id: 4, src: reliant, alt: 'Reliant', name: 'reliant' },
-    { id: 5, src: fleetAdvisor, alt: 'Fleet Advisor', name: 'fleet-advisor' },
-    { id: 6, src: vwco, alt: 'VWCO', name: 'vwco' },
-    { id: 7, src: norcon, alt: 'Norcon', name: 'norcon' },
-    { id: 8, src: reliant, alt: 'Reliant', name: 'reliant' },
+    { id: 5, src: autodesk, alt: 'Autodesk', name: 'autodesk' },
+    { id: 6, src: chatgpt, alt: 'ChatGPT', name: 'chatgpt' },
+    { id: 7, src: claude, alt: 'Claude', name: 'claude' },
+    { id: 8, src: cmic, alt: 'CMiC', name: 'cmic' },
+    { id: 9, src: microsoft, alt: 'Microsoft', name: 'microsoft' },
+    { id: 10, src: procore, alt: 'Procore', name: 'procore' },
+    // Duplicates for seamless carousel loop
+    { id: 11, src: fleetAdvisor, alt: 'Fleet Advisor', name: 'fleet-advisor' },
+    { id: 12, src: vwco, alt: 'VWCO', name: 'vwco' },
+    { id: 13, src: norcon, alt: 'Norcon', name: 'norcon' },
+    { id: 14, src: reliant, alt: 'Reliant', name: 'reliant' },
+    { id: 15, src: autodesk, alt: 'Autodesk', name: 'autodesk' },
+    { id: 16, src: chatgpt, alt: 'ChatGPT', name: 'chatgpt' },
+    { id: 17, src: claude, alt: 'Claude', name: 'claude' },
+    { id: 18, src: cmic, alt: 'CMiC', name: 'cmic' },
+    { id: 19, src: microsoft, alt: 'Microsoft', name: 'microsoft' },
+    { id: 20, src: procore, alt: 'Procore', name: 'procore' },
   ];
 
   // ============ AI INTEGRATION BOXES DATA ============
