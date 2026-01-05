@@ -3,6 +3,7 @@ import './Home.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Modal from '../components/Modal';
+import Slider from '../components/Slider';
 import BIRDS from 'vanta/dist/vanta.birds.min';
 // NOTE: Three.js loaded via CDN in index.html
 
@@ -42,10 +43,22 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalSubtitle, setModalSubtitle] = useState('');
 
+  // ============ VALUE CALCULATOR STATE ============
+  const [employees, setEmployees] = useState(10);
+  const [hours, setHours] = useState(5);
+  const [salary, setSalary] = useState(75000);
+  const [result, setResult] = useState(0);
+  const [showResult, setShowResult] = useState(false);
+
   // ============ OPEN MODAL WITH SPECIFIC SUBTITLE ============
   const openModal = (subtitle) => {
     setModalSubtitle(subtitle);
     setIsModalOpen(true);
+  };
+
+  // ============ FORMAT CURRENCY ============
+  const formatCurrency = (value) => {
+    return value.toLocaleString('en-US');
   };
 
   // ============ PARTNERS CAROUSEL STATE ============
@@ -81,43 +94,43 @@ const Home = () => {
     {
       id: 1,
       icon: iconInternalKnowledge,
-      title: 'Internal LLM',
-      tagline: 'ChatGPT fine-tuned and trained on your company\'s knowledge',
+      title: 'Project Search',
+      tagline: 'Find any drawing, spec, or RFI response in seconds',
       illustration: illustrationInternalKnowledge
     },
     {
       id: 2,
       icon: iconCustomerPortal,
-      title: 'External LLM',
-      tagline: 'Modern LLM that delivers useful answers to your customers',
+      title: 'COI Compliance',
+      tagline: 'Auto-track and chase expired sub policies',
       illustration: illustrationCustomerPortal
     },
     {
       id: 3,
       icon: iconDocumentIntelligence,
-      title: 'Document Organization',
-      tagline: 'Rename and store files automatically and consistently',
+      title: 'Lien Waiver Collection',
+      tagline: 'Auto-request and match waivers to payments',
       illustration: illustrationDocumentIntelligence
     },
     {
       id: 4,
       icon: iconDataBridge,
-      title: 'Data Bridge Automation',
-      tagline: 'Extract information from one document and store it in another software automatically',
+      title: 'Invoice Processing',
+      tagline: 'Auto-code, route, and track AP approvals',
       illustration: illustrationDataBridge
     },
     {
       id: 5,
       icon: iconIntelligentDoc,
-      title: 'Intelligent Document Processing',
-      tagline: 'AI analysis of large and complex documents for quick and reliable answers',
+      title: 'RFI Tracking',
+      tagline: 'Auto-route and escalate unanswered requests',
       illustration: illustrationIntelligentDoc
     },
     {
       id: 6,
       icon: iconProactiveFollowUp,
-      title: 'Proactive Follow-Up System',
-      tagline: 'Automated reminders and escalations',
+      title: 'Vendor Follow-Up',
+      tagline: 'Auto-chase quotes and bid responses',
       illustration: illustrationProactiveFollowUp
     }
   ];
@@ -222,10 +235,99 @@ const Home = () => {
         </div>
       </section>
 
-      {/* PLACEHOLDER SECTION */}
-      <section className="placeholder-section">
-        <div className="placeholder-container">
-          <h2 className="placeholder-title">Unlock Your Team's Potential</h2>
+      {/* VALUE CALCULATOR SECTION */}
+      <section className="home-value-section">
+        <div className="home-value-container">
+          <h2 className="home-value-title">Unlock Your Team's Potential</h2>
+          <p className="home-value-subtitle">Small time savings add up big over the course of a year.</p>
+          
+          <div className="home-value-cards">
+            {/* Card 1: Employees */}
+            <div className="home-value-card">
+              <div className="home-value-number">{employees}</div>
+              <div className="home-value-label">Employees</div>
+              <div className="home-value-slider-wrapper">
+                <Slider
+                  value={employees}
+                  onChange={(val) => {
+                    setEmployees(val);
+                    setShowResult(false);
+                  }}
+                  min={1}
+                  max={50}
+                  width="100%"
+                  displayValue=""
+                  suffix=""
+                />
+              </div>
+            </div>
+
+            {/* Card 2: Hours */}
+            <div className="home-value-card">
+              <div className="home-value-number">{hours}</div>
+              <div className="home-value-label">Hours Per Week</div>
+              <div className="home-value-slider-wrapper">
+                <Slider
+                  value={hours}
+                  onChange={(val) => {
+                    setHours(val);
+                    setShowResult(false);
+                  }}
+                  min={1}
+                  max={20}
+                  width="100%"
+                  displayValue=""
+                  suffix=""
+                />
+              </div>
+            </div>
+
+            {/* Card 3: Salary */}
+            <div className="home-value-card">
+              <div className="home-value-number">${formatCurrency(salary)}</div>
+              <div className="home-value-label">Average Salary</div>
+              <div className="home-value-slider-wrapper">
+                <Slider
+                  value={salary}
+                  onChange={(val) => {
+                    setSalary(val);
+                    setShowResult(false);
+                  }}
+                  min={40000}
+                  max={150000}
+                  step={5000}
+                  width="100%"
+                  displayValue=""
+                  suffix=""
+                />
+              </div>
+            </div>
+
+            {/* Card 4: Calculate/Result */}
+            <div 
+              className={`home-value-card home-value-card-result ${showResult ? 'calculated' : ''}`}
+              onClick={() => {
+                if (!showResult) {
+                  const hourlyRate = salary / 2000;
+                  const totalHours = employees * hours * 52;
+                  const annualCost = Math.round(totalHours * hourlyRate);
+                  setResult(annualCost);
+                  setShowResult(true);
+                }
+              }}
+            >
+              <div className="home-value-result-content">
+                {!showResult ? (
+                  <div className="home-value-calculate">Calculate</div>
+                ) : (
+                  <>
+                    <div className="home-value-result-number" key={result}>${formatCurrency(result)}</div>
+                    <div className="home-value-result-label">Annual Value</div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -286,13 +388,6 @@ const Home = () => {
             
             <div className="partners-carousel">
               <div className="partners-track" ref={scrollRef}>
-                {/* 
-                  #explanation: The 'logo-cmic' class is conditionally applied below because 
-                  the CMiC logo SVG is much larger/bolder than other partner logos, causing it 
-                  to visually overpower the carousel. The class scales it down to match the 
-                  visual weight of other logos while preserving consistent wrapper spacing.
-                  See .logo-cmic in Home.css for the sizing rule.
-                */}
                 {logos.map((logo) => (
                   <div 
                     key={logo.id} 

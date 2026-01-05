@@ -108,26 +108,251 @@
 }
 
 /* ============================================
-   PLACEHOLDER SECTION (formerly chatbox)
+   HOME VALUE CALCULATOR SECTION (INVERTED COLORS)
    ============================================ */
-.placeholder-section {
-  padding: 80px 20px;
+.home-value-section {
+  padding: 60px 20px;
   background-color: #1a1a1a;
-  min-height: 300px;
 }
 
-.placeholder-container {
-  max-width: 800px;
+.home-value-container {
+  max-width: 1100px;
   margin: 0 auto;
 }
 
-.placeholder-title {
+.home-value-title {
   font-family: 'Khand', sans-serif;
   font-size: 48px;
   font-weight: 400;
   color: #ffffe2;
+  margin-bottom: 12px;
   letter-spacing: 0.02em;
   line-height: 1.2;
+}
+
+.home-value-subtitle {
+  font-family: 'Array', sans-serif;
+  font-size: 16px;
+  color: #b8b8a0;
+  margin-bottom: 36px;
+}
+
+.home-value-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+/* INVERTED: Cream background, dark text */
+.home-value-card {
+  background-color: #ffffe2;
+  border-radius: 16px;
+  padding: 36px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 240px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.home-value-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(255, 255, 226, 0.15);
+}
+
+.home-value-number {
+  font-family: 'Array', sans-serif;
+  font-size: 44px;
+  font-weight: 400;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-top: auto;
+  margin-bottom: auto;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Salary card needs smaller font to fit full number */
+.home-value-card:nth-child(3) .home-value-number {
+  font-size: 34px;
+}
+
+.home-value-label {
+  font-family: 'Array', sans-serif;
+  font-size: 13px;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.home-value-slider-wrapper {
+  width: 100%;
+}
+
+.home-value-slider-wrapper .inline-slider-container {
+  width: 100% !important;
+  margin: 0;
+}
+
+.home-value-slider-wrapper .slider-display-value,
+.home-value-slider-wrapper .slider-suffix {
+  display: none;
+}
+
+/* ============================================
+   SLIDER OVERRIDES FOR HOME PAGE (INVERTED)
+   Scoped to .home-value-section only
+   ============================================ */
+.home-value-section .inline-slider::-webkit-slider-runnable-track {
+  background: #1a1a1a;
+}
+
+.home-value-section .inline-slider::-moz-range-track {
+  background: #1a1a1a;
+}
+
+.home-value-section .inline-slider::-moz-range-progress {
+  background: #1a1a1a;
+}
+
+.home-value-section .inline-slider::-webkit-slider-thumb {
+  background: #ffffe2;
+  border: 2px solid #1a1a1a;
+}
+
+.home-value-section .inline-slider::-moz-range-thumb {
+  background: #ffffe2;
+  border: 2px solid #1a1a1a;
+}
+
+.home-value-section .inline-slider:hover::-webkit-slider-thumb {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+}
+
+.home-value-section .inline-slider:hover::-moz-range-thumb {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+}
+
+/* ============================================
+   CALCULATE/RESULT CARD - INVERTED
+   ============================================ */
+.home-value-card-result {
+  cursor: pointer;
+  position: relative;
+  justify-content: center;
+  transition: 
+    transform 0.3s ease,
+    min-height 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    padding 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.home-value-card-result:not(.calculated):hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(255, 255, 226, 0.3);
+}
+
+.home-value-card-result:not(.calculated):active {
+  transform: translateY(-3px) scale(0.98);
+}
+
+.home-value-result-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Calculate text - before clicking */
+.home-value-calculate {
+  font-family: 'Khand', sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #1a1a1a;
+  letter-spacing: 0.02em;
+  text-align: center;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* When calculated, hide the calculate text */
+.home-value-card-result.calculated .home-value-calculate {
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Result number - smooth fade in after box expands */
+.home-value-result-number {
+  font-family: 'Array', sans-serif;
+  font-size: 34px;
+  font-weight: 400;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 12px;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: homeValueFadeSlideIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+}
+
+/* Result label - fade in slightly after the number */
+.home-value-result-label {
+  font-family: 'Array', sans-serif;
+  font-size: 13px;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: homeValueFadeSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+}
+
+/* Smooth S-curve fade and slide animation */
+@keyframes homeValueFadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Box expansion animation when calculated */
+.home-value-card-result.calculated {
+  cursor: default;
+  box-shadow: 0 4px 24px rgba(26, 26, 26, 0.1);
+}
+
+/* Pulse animation on the result card when first calculated */
+@keyframes homeValueResultPulse {
+  0% {
+    box-shadow: 0 4px 24px rgba(26, 26, 26, 0);
+  }
+  50% {
+    box-shadow: 0 4px 32px rgba(26, 26, 26, 0.2);
+  }
+  100% {
+    box-shadow: 0 4px 24px rgba(26, 26, 26, 0.1);
+  }
+}
+
+.home-value-card-result.calculated {
+  animation: homeValueResultPulse 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* ============================================
@@ -172,44 +397,44 @@
 .ai-integration-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  max-width: 800px;
+  gap: 24px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
 .ai-integration-box {
   background-color: #ffffe2;
-  border: 1px solid #1a1a1a;
-  padding: 20px;
+  border: 2px solid #1a1a1a;
+  border-radius: 16px;
+  padding: 25px;
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  height: 280px;
+  height: 350px;
 }
 
 .ai-integration-box:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 20px rgba(26, 26, 26, 0.1);
-  border-color: #1a1a1a;
 }
 
 .ai-box-header {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 10px;
+  gap: 14px;
+  margin-bottom: 12px;
 }
 
 .ai-box-icon {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
   margin-top: 2px;
 }
 
 .ai-box-title {
   font-family: 'Khand', sans-serif;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 400;
   color: #1a1a1a;
   letter-spacing: 0.02em;
@@ -219,7 +444,7 @@
 
 .ai-box-tagline {
   font-family: 'Array', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   font-style: normal;
   color: #4a4a4a;
   margin-bottom: 16px;
@@ -228,7 +453,7 @@
 
 .ai-box-illustration {
   width: 100%;
-  height: 120px;
+  height: 150px;
   margin-top: auto;
   display: block;
   object-fit: contain;
@@ -485,6 +710,12 @@
 }
 
 @media (max-width: 968px) {
+  /* Home Value Calculator responsive */
+  .home-value-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
   .ai-integration {
     padding: 60px 20px;
   }
@@ -503,17 +734,17 @@
 
   .ai-integration-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    max-width: 600px;
+    gap: 20px;
+    max-width: 700px;
   }
 
   .ai-integration-box {
-    padding: 18px;
-    height: 260px;
+    padding: 22px;
+    height: 320px;
   }
 
   .ai-box-illustration {
-    height: 110px;
+    height: 130px;
   }
 }
 
@@ -546,14 +777,50 @@
     height: 10px;
   }
   
-  /* Placeholder responsive */
-  .placeholder-section {
-    padding: 60px 20px;
+  /* Home Value Calculator responsive */
+  .home-value-section {
+    padding: 50px 20px;
+  }
+
+  .home-value-title {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+
+  .home-value-subtitle {
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+
+  .home-value-cards {
+    gap: 16px;
+  }
+
+  .home-value-card {
+    padding: 28px 20px;
     min-height: 200px;
   }
 
-  .placeholder-title {
-    font-size: 36px;
+  .home-value-number {
+    font-size: 38px;
+  }
+
+  .home-value-card:nth-child(3) .home-value-number {
+    font-size: 28px;
+  }
+
+  .home-value-result-number {
+    font-size: 28px;
+  }
+
+  .home-value-label,
+  .home-value-result-label {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  .home-value-calculate {
+    font-size: 24px;
   }
   
   /* CTA responsive */
@@ -622,12 +889,12 @@
   .ai-integration-grid {
     grid-template-columns: 1fr;
     gap: 16px;
-    max-width: 300px;
+    max-width: 400px;
   }
 
   .ai-integration-box {
-    padding: 16px;
-    height: 240px;
+    padding: 20px;
+    height: 300px;
   }
 
   .ai-box-title {
@@ -640,7 +907,7 @@
   }
 
   .ai-box-illustration {
-    height: 100px;
+    height: 120px;
   }
 
   .ai-box-tagline {
@@ -672,14 +939,51 @@
     height: 8px;
   }
 
-  /* Placeholder responsive */
-  .placeholder-section {
-    padding: 50px 20px;
-    min-height: 150px;
+  /* Home Value Calculator responsive */
+  .home-value-section {
+    padding: 40px 20px;
   }
 
-  .placeholder-title {
-    font-size: 32px;
+  .home-value-title {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+
+  .home-value-subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .home-value-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .home-value-card {
+    padding: 24px 20px;
+    min-height: 180px;
+  }
+
+  .home-value-number {
+    font-size: 34px;
+  }
+
+  .home-value-card:nth-child(3) .home-value-number {
+    font-size: 26px;
+  }
+
+  .home-value-result-number {
+    font-size: 26px;
+  }
+
+  .home-value-label,
+  .home-value-result-label {
+    font-size: 10px;
+    margin-bottom: 10px;
+  }
+
+  .home-value-calculate {
+    font-size: 22px;
   }
   
   /* Partners responsive */
