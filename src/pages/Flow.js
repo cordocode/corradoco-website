@@ -243,7 +243,7 @@ const Flow = () => {
                     setShowResult(false);
                   }}
                   min={1}
-                  max={50}
+                  max={500}
                   width="100%"
                   displayValue=""
                   suffix=""
@@ -263,7 +263,7 @@ const Flow = () => {
                     setShowResult(false);
                   }}
                   min={1}
-                  max={20}
+                  max={30}
                   width="100%"
                   displayValue=""
                   suffix=""
@@ -283,7 +283,7 @@ const Flow = () => {
                     setShowResult(false);
                   }}
                   min={40000}
-                  max={150000}
+                  max={200000}
                   step={5000}
                   width="100%"
                   displayValue=""
