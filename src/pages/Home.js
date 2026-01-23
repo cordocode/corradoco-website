@@ -43,11 +43,11 @@ const Home = () => {
   const [modalSubtitle, setModalSubtitle] = useState('');
 
   // ============ CALCULATOR STATE ============
-  const [bidsPerYear, setBidsPerYear] = useState(50);
-  const [winRate, setWinRate] = useState(15);
-  const [contractValue, setContractValue] = useState(2500000);
-  const [hoursPerBid, setHoursPerBid] = useState(80);
-  const [profitMargin, setProfitMargin] = useState(4);
+  const [bidsPerYear, setBidsPerYear] = useState(350);
+  const [winRate, setWinRate] = useState(50);
+  const [contractValue, setContractValue] = useState(7200000);
+  const [profitMargin, setProfitMargin] = useState(3.2);
+  const [showResults, setShowResults] = useState(false);
 
   // ============ OPEN MODAL WITH SPECIFIC SUBTITLE ============
   const openModal = (subtitle) => {
@@ -63,10 +63,6 @@ const Home = () => {
       return '$' + (value / 1000).toFixed(0) + 'k';
     }
     return '$' + value.toLocaleString('en-US');
-  };
-
-  const formatFullCurrency = (value) => {
-    return '$' + Math.round(value).toLocaleString('en-US');
   };
 
   // ============ CALCULATOR LOGIC ============
@@ -86,9 +82,28 @@ const Home = () => {
     return additionalProfit;
   };
 
-  const tier1Profit = calculateTierProfit(0.10); // 10% automation
-  const tier2Profit = calculateTierProfit(0.25); // 25% automation
-  const tier3Profit = calculateTierProfit(0.50); // 50% automation
+  const tier1Profit = calculateTierProfit(0.10);
+  const tier2Profit = calculateTierProfit(0.25);
+  const tier3Profit = calculateTierProfit(0.50);
+
+  const handleCalculate = () => {
+    setShowResults(true);
+  };
+
+  const handleSliderChange = (setter) => (val) => {
+    setter(val);
+    setShowResults(false);
+  };
+  
+  // Format profit for display - rounds to K or M for large values
+  const formatProfit = (value) => {
+    if (value >= 1000000) {
+      return '+$' + (value / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    } else if (value >= 1000) {
+      return '+$' + Math.round(value / 1000) + 'k';
+    }
+    return '+$' + Math.round(value).toLocaleString('en-US');
+  };
 
   // ============ PARTNERS CAROUSEL STATE ============
   const scrollRef = useRef(null);
@@ -250,10 +265,11 @@ const Home = () => {
       <section className="hero" ref={vantaRef}>
         <div className="hero-container">
           <h1 className="hero-headline">
-            Double Your Bidding Capacity.
+            Cut bidding time by <span className="hero-underline">50%</span>.<br />
+            <span className="hero-bold">Win 2x Bids.</span>
           </h1>
           <p className="hero-subheadline">
-            Give your estimators a super-intelligent AI assistant. We automate the manual grunt work—chasing subs, entering data, and reviewing scope—so your team can bid 2x more work with the same headcount.
+            Give your estimators an intelligent AI assistant. We automate the manual work like chasing subs, entering data, and reviewing scope—so your team can bid 2x more work with the same headcount.
           </p>
           <button className="hero-cta-button" onClick={() => openModal("See how AI can double your bidding capacity.")}>
             Request a Demo
@@ -262,156 +278,132 @@ const Home = () => {
       </section>
 
       {/* PRE-CONSTRUCTION POTENTIAL CALCULATOR */}
-      <section className="calculator-section">
-        <div className="calculator-container">
-          <h2 className="calculator-title">Pre-Construction Potential</h2>
-          <p className="calculator-subtitle">
-            See how much additional profit you could generate by reinvesting time saved into bidding more projects.
-          </p>
+      <section className="home-value-section">
+        <div className="home-value-container">
+          <h2 className="home-value-title">Pre-Construction Potential</h2>
+          <p className="home-value-subtitle">See how much additional profit you could unlock by automating your bidding process.</p>
           
-          {/* Sliders Grid */}
-          <div className="calculator-sliders">
-            {/* Slider 1: Total Bids Per Year */}
-            <div className="calc-slider-group">
-              <div className="calc-slider-header">
-                <span className="calc-slider-label">Total Bids Per Year</span>
-                <span className="calc-slider-value">{bidsPerYear}</span>
-              </div>
-              <input
-                type="range"
-                className="calc-slider"
-                min={10}
-                max={500}
-                step={5}
-                value={bidsPerYear}
-                onChange={(e) => setBidsPerYear(Number(e.target.value))}
-              />
-              <div className="calc-slider-range">
-                <span>10</span>
-                <span>500</span>
+          <div className="home-value-cards">
+            {/* Card 1: Bids Per Year */}
+            <div className="home-value-card">
+              <div className="home-value-number">{bidsPerYear}</div>
+              <div className="home-value-label">Bids Per Year</div>
+              <div className="home-value-slider-wrapper">
+                <input
+                  type="range"
+                  className="home-calc-slider"
+                  min={10}
+                  max={500}
+                  step={5}
+                  value={bidsPerYear}
+                  onChange={(e) => handleSliderChange(setBidsPerYear)(Number(e.target.value))}
+                />
               </div>
             </div>
 
-            {/* Slider 2: Win Rate */}
-            <div className="calc-slider-group">
-              <div className="calc-slider-header">
-                <span className="calc-slider-label">Win Rate</span>
-                <span className="calc-slider-value">{winRate}%</span>
-              </div>
-              <input
-                type="range"
-                className="calc-slider"
-                min={5}
-                max={50}
-                step={1}
-                value={winRate}
-                onChange={(e) => setWinRate(Number(e.target.value))}
-              />
-              <div className="calc-slider-range">
-                <span>5%</span>
-                <span>50%</span>
+            {/* Card 2: Win Rate */}
+            <div className="home-value-card">
+              <div className="home-value-number">{winRate}%</div>
+              <div className="home-value-label">Win Rate</div>
+              <div className="home-value-slider-wrapper">
+                <input
+                  type="range"
+                  className="home-calc-slider"
+                  min={20}
+                  max={70}
+                  step={1}
+                  value={winRate}
+                  onChange={(e) => handleSliderChange(setWinRate)(Number(e.target.value))}
+                />
               </div>
             </div>
 
-            {/* Slider 3: Avg Contract Value */}
-            <div className="calc-slider-group">
-              <div className="calc-slider-header">
-                <span className="calc-slider-label">Avg. Contract Value</span>
-                <span className="calc-slider-value">{formatCurrency(contractValue)}</span>
-              </div>
-              <input
-                type="range"
-                className="calc-slider"
-                min={500000}
-                max={50000000}
-                step={100000}
-                value={contractValue}
-                onChange={(e) => setContractValue(Number(e.target.value))}
-              />
-              <div className="calc-slider-range">
-                <span>$500k</span>
-                <span>$50M</span>
+            {/* Card 3: Contract Value */}
+            <div className="home-value-card">
+              <div className="home-value-number">{formatCurrency(contractValue)}</div>
+              <div className="home-value-label">Avg. Contract</div>
+              <div className="home-value-slider-wrapper">
+                <input
+                  type="range"
+                  className="home-calc-slider"
+                  min={2500000}
+                  max={100000000}
+                  step={100000}
+                  value={contractValue}
+                  onChange={(e) => handleSliderChange(setContractValue)(Number(e.target.value))}
+                />
               </div>
             </div>
 
-            {/* Slider 4: Man-Hours Per Bid */}
-            <div className="calc-slider-group">
-              <div className="calc-slider-header">
-                <span className="calc-slider-label">Avg. Man-Hours Per Bid</span>
-                <span className="calc-slider-value">{hoursPerBid} hrs</span>
-              </div>
-              <input
-                type="range"
-                className="calc-slider"
-                min={20}
-                max={400}
-                step={10}
-                value={hoursPerBid}
-                onChange={(e) => setHoursPerBid(Number(e.target.value))}
-              />
-              <div className="calc-slider-range">
-                <span>20 hrs</span>
-                <span>400 hrs</span>
+            {/* Card 4: Profit Margin - fixed width display */}
+            <div className="home-value-card">
+              <div className="home-value-number home-value-number-fixed">{profitMargin.toFixed(1)}%</div>
+              <div className="home-value-label">Net Margin</div>
+              <div className="home-value-slider-wrapper">
+                <input
+                  type="range"
+                  className="home-calc-slider"
+                  min={2}
+                  max={7}
+                  step={0.1}
+                  value={profitMargin}
+                  onChange={(e) => handleSliderChange(setProfitMargin)(Number(e.target.value))}
+                />
               </div>
             </div>
 
-            {/* Slider 5: Net Profit Margin */}
-            <div className="calc-slider-group">
-              <div className="calc-slider-header">
-                <span className="calc-slider-label">Net Profit Margin</span>
-                <span className="calc-slider-value">{profitMargin}%</span>
-              </div>
-              <input
-                type="range"
-                className="calc-slider"
-                min={1}
-                max={15}
-                step={0.5}
-                value={profitMargin}
-                onChange={(e) => setProfitMargin(Number(e.target.value))}
-              />
-              <div className="calc-slider-range">
-                <span>1%</span>
-                <span>15%</span>
-              </div>
+            {/* Card 5: Calculate Button */}
+            <div 
+              className={`home-value-card home-value-card-calculate ${showResults ? 'calculated' : ''}`}
+              onClick={handleCalculate}
+            >
+              <div className="home-value-calculate">Calculate</div>
             </div>
           </div>
 
-          {/* Results Tiers */}
-          <div className="calculator-results">
-            {/* Tier 1: Bronze */}
-            <div className="result-tier tier-bronze">
-              <div className="tier-badge">10% Automation</div>
-              <h3 className="tier-name">The Efficiency Bump</h3>
-              <p className="tier-subtext">Removing simple admin & data entry</p>
-              <div className="tier-profit">+{formatFullCurrency(tier1Profit)}</div>
-              <p className="tier-label">Additional Annual Profit</p>
+          {/* Results Tiers - appear after Calculate */}
+          <div className={`home-results-tiers ${showResults ? 'visible' : ''}`}>
+            {/* Tier 1: 10% */}
+            <div className="result-tier">
+              <div className="tier-header">
+                <div className="tier-percent">10%</div>
+                <span className="tier-label-text">Efficiency Gain</span>
+              </div>
+              <div className="tier-body">
+                <h3 className="tier-name">The Efficiency Bump</h3>
+                <p className="tier-subtext">Removing simple admin & data entry</p>
+                <div className="tier-profit">{formatProfit(tier1Profit)}</div>
+                <p className="tier-profit-label">Additional Annual Profit</p>
+              </div>
             </div>
 
-            {/* Tier 2: Silver */}
-            <div className="result-tier tier-silver">
-              <div className="tier-badge">25% Automation</div>
-              <h3 className="tier-name">The Growth Mode</h3>
-              <p className="tier-subtext">Streamlining scope sheets & outreach</p>
-              <div className="tier-profit">+{formatFullCurrency(tier2Profit)}</div>
-              <p className="tier-label">Additional Annual Profit</p>
+            {/* Tier 2: 25% */}
+            <div className="result-tier">
+              <div className="tier-header">
+                <div className="tier-percent">25%</div>
+                <span className="tier-label-text">Efficiency Gain</span>
+              </div>
+              <div className="tier-body">
+                <h3 className="tier-name">The Growth Mode</h3>
+                <p className="tier-subtext">Streamlining scope sheets & outreach</p>
+                <div className="tier-profit">{formatProfit(tier2Profit)}</div>
+                <p className="tier-profit-label">Additional Annual Profit</p>
+              </div>
             </div>
 
-            {/* Tier 3: Gold */}
-            <div className="result-tier tier-gold">
-              <div className="tier-badge">50% Automation</div>
-              <h3 className="tier-name">The Market Leader</h3>
-              <p className="tier-subtext">Full "Intelligent Intern" integration</p>
-              <div className="tier-profit">+{formatFullCurrency(tier3Profit)}</div>
-              <p className="tier-label">Additional Annual Profit</p>
+            {/* Tier 3: 50% */}
+            <div className="result-tier">
+              <div className="tier-header">
+                <div className="tier-percent">50%</div>
+                <span className="tier-label-text">Efficiency Gain</span>
+              </div>
+              <div className="tier-body">
+                <h3 className="tier-name">The Market Leader</h3>
+                <p className="tier-subtext">Full "Intelligent Intern" integration</p>
+                <div className="tier-profit">{formatProfit(tier3Profit)}</div>
+                <p className="tier-profit-label">Additional Annual Profit</p>
+              </div>
             </div>
-          </div>
-
-          {/* CTA Button */}
-          <div className="calculator-cta">
-            <button className="calculator-cta-button" onClick={() => openModal("Let's explore your pre-construction potential together.")}>
-              Unlock Your Potential → Book Discovery
-            </button>
           </div>
         </div>
       </section>
@@ -420,7 +412,7 @@ const Home = () => {
       <section className="ai-integration">
         <div className="ai-integration-container">
           <div className="ai-integration-header">
-            <h2 className="ai-integration-title">Where to get started with AI</h2>
+            <h2 className="ai-integration-title">Where to get started</h2>
             <p className="ai-integration-subtitle">Six areas where automation actually delivers</p>
           </div>
 

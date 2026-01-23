@@ -40,12 +40,22 @@
   font-family: 'Khand', sans-serif;
   font-weight: 400;
   font-size: 64px;
-  line-height: 1.1;
+  line-height: 1.15;
   color: #1a1a1a;
   max-width: 800px;
   margin: 0 auto 32px;
   position: relative;
   z-index: 1;
+}
+
+.hero-underline {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+}
+
+.hero-bold {
+  font-weight: 600;
 }
 
 .hero-subheadline {
@@ -85,19 +95,19 @@
 }
 
 /* ============================================
-   PRE-CONSTRUCTION POTENTIAL CALCULATOR
+   HOME VALUE CALCULATOR SECTION (TWO-TONE)
    ============================================ */
-.calculator-section {
-  padding: 80px 20px;
+.home-value-section {
+  padding: 60px 20px;
   background-color: #1a1a1a;
 }
 
-.calculator-container {
+.home-value-container {
   max-width: 1100px;
   margin: 0 auto;
 }
 
-.calculator-title {
+.home-value-title {
   font-family: 'Khand', sans-serif;
   font-size: 48px;
   font-weight: 400;
@@ -105,254 +115,256 @@
   margin-bottom: 12px;
   letter-spacing: 0.02em;
   line-height: 1.2;
-  text-align: center;
 }
 
-.calculator-subtitle {
+.home-value-subtitle {
   font-family: 'Array', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   color: #b8b8a0;
-  margin-bottom: 48px;
-  text-align: center;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
+  margin-bottom: 36px;
 }
 
-/* Sliders Grid */
-.calculator-sliders {
+.home-value-cards {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 24px;
-  margin-bottom: 48px;
+  align-items: start;
 }
 
-.calc-slider-group {
-  background-color: rgba(255, 255, 226, 0.05);
-  border: 1px solid rgba(255, 255, 226, 0.15);
-  border-radius: 12px;
-  padding: 24px 20px;
-}
-
-.calc-slider-header {
+/* Cream cards with dark text */
+.home-value-card {
+  background-color: #ffffe2;
+  border-radius: 16px;
+  padding: 36px 24px;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-  gap: 8px;
+  flex-direction: column;
+  align-items: center;
+  min-height: 240px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.calc-slider-label {
+.home-value-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(255, 255, 226, 0.15);
+}
+
+.home-value-number {
   font-family: 'Array', sans-serif;
-  font-size: 13px;
-  color: #b8b8a0;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  line-height: 1.3;
-}
-
-.calc-slider-value {
-  font-family: 'Khand', sans-serif;
-  font-size: 28px;
+  font-size: 44px;
   font-weight: 400;
-  color: #ffffe2;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
   line-height: 1;
+  margin-top: auto;
+  margin-bottom: auto;
+  text-align: center;
   white-space: nowrap;
 }
 
-.calc-slider {
+/* Fixed width for percentage to prevent jumping */
+.home-value-number-fixed {
+  min-width: 120px;
+  text-align: center;
+}
+
+/* Contract value card needs smaller font */
+.home-value-card:nth-child(3) .home-value-number {
+  font-size: 34px;
+}
+
+.home-value-label {
+  font-family: 'Array', sans-serif;
+  font-size: 13px;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.home-value-slider-wrapper {
+  width: 100%;
+}
+
+/* Slider styles */
+.home-calc-slider {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
   height: 6px;
-  background: rgba(255, 255, 226, 0.2);
+  background: #1a1a1a;
   border-radius: 3px;
   outline: none;
   cursor: pointer;
 }
 
-.calc-slider::-webkit-slider-thumb {
+.home-calc-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: #ffffe2;
+  border: 2px solid #1a1a1a;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
-.calc-slider::-webkit-slider-thumb:hover {
+.home-calc-slider::-webkit-slider-thumb:hover {
   transform: scale(1.15);
-  box-shadow: 0 0 12px rgba(255, 255, 226, 0.4);
 }
 
-.calc-slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+.home-calc-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: #ffffe2;
+  border: 2px solid #1a1a1a;
   cursor: pointer;
-  border: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.calc-slider::-moz-range-thumb:hover {
-  transform: scale(1.15);
-  box-shadow: 0 0 12px rgba(255, 255, 226, 0.4);
+/* ============================================
+   CALCULATE BUTTON CARD
+   ============================================ */
+.home-value-card-calculate {
+  cursor: pointer;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.calc-slider-range {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-  font-family: 'Array', sans-serif;
-  font-size: 11px;
-  color: #6a6a6a;
+.home-value-card-calculate:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(255, 255, 226, 0.3);
 }
 
-/* Results Tiers */
-.calculator-results {
+.home-value-card-calculate:active {
+  transform: translateY(-3px) scale(0.98);
+}
+
+.home-value-card-calculate.calculated {
+  background-color: #e8e8c8;
+}
+
+.home-value-calculate {
+  font-family: 'Khand', sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #1a1a1a;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+/* ============================================
+   RESULTS TIERS - 3 Cards Below
+   ============================================ */
+.home-results-tiers {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  margin-bottom: 40px;
+  margin-top: 40px;
+  padding-top: 10px;
+  opacity: 0;
+  transform: translateY(20px);
+  max-height: 0;
+  overflow: visible;
+  transition: 
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    max-height 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    margin-top 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-results-tiers.visible {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 500px;
+  margin-top: 40px;
 }
 
 .result-tier {
+  background-color: #ffffe2;
   border-radius: 16px;
-  padding: 32px 28px;
-  text-align: center;
+  overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .result-tier:hover {
   transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(255, 255, 226, 0.15);
 }
 
-/* Tier 1: Bronze */
-.tier-bronze {
-  background: linear-gradient(135deg, #3d3428 0%, #2a2318 100%);
-  border: 1px solid #5c4d3a;
-}
-
-.tier-bronze .tier-badge {
-  background-color: #5c4d3a;
-  color: #d4c4a8;
-}
-
-.tier-bronze .tier-profit {
-  color: #d4c4a8;
-}
-
-/* Tier 2: Silver */
-.tier-silver {
-  background: linear-gradient(135deg, #3a3f3a 0%, #252825 100%);
-  border: 1px solid #5a6a5a;
-}
-
-.tier-silver .tier-badge {
-  background-color: #5a6a5a;
-  color: #c8d8c8;
-}
-
-.tier-silver .tier-profit {
-  color: #a8d8a8;
-}
-
-/* Tier 3: Gold - Highlighted */
-.tier-gold {
-  background: linear-gradient(135deg, #3d3a20 0%, #2a2815 100%);
-  border: 2px solid #8a7a30;
-  box-shadow: 0 0 30px rgba(212, 180, 80, 0.2);
-  transform: scale(1.02);
-}
-
-.tier-gold:hover {
-  transform: scale(1.02) translateY(-4px);
-  box-shadow: 0 8px 40px rgba(212, 180, 80, 0.3);
-}
-
-.tier-gold .tier-badge {
-  background-color: #8a7a30;
-  color: #ffffe2;
-}
-
-.tier-gold .tier-profit {
-  color: #e8d85c;
-}
-
-.tier-badge {
-  display: inline-block;
-  font-family: 'Array', sans-serif;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 6px 14px;
-  border-radius: 20px;
-  margin-bottom: 16px;
-}
-
-.tier-name {
-  font-family: 'Khand', sans-serif;
-  font-size: 24px;
-  font-weight: 400;
-  color: #ffffe2;
-  margin-bottom: 8px;
-  letter-spacing: 0.02em;
-}
-
-.tier-subtext {
-  font-family: 'Array', sans-serif;
-  font-size: 13px;
-  color: #8a8a8a;
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-
-.tier-profit {
-  font-family: 'Khand', sans-serif;
-  font-size: 42px;
-  font-weight: 400;
-  margin-bottom: 8px;
-  letter-spacing: -0.02em;
-}
-
-.tier-label {
-  font-family: 'Array', sans-serif;
-  font-size: 12px;
-  color: #6a6a6a;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Calculator CTA */
-.calculator-cta {
+/* Dark header section with percentage */
+.tier-header {
+  background-color: #1a1a1a;
+  padding: 28px 24px 24px;
   text-align: center;
 }
 
-.calculator-cta-button {
-  display: inline-block;
-  padding: 16px 40px;
-  background-color: #ffffe2;
-  color: #1a1a1a;
-  text-decoration: none;
+.tier-percent {
   font-family: 'Array', sans-serif;
-  font-size: 15px;
-  letter-spacing: 0.02em;
-  transition: all 0.3s ease;
-  border: 2px solid #ffffe2;
-  cursor: pointer;
-}
-
-.calculator-cta-button:hover {
-  background-color: transparent;
+  font-size: 44px;
+  font-weight: 400;
   color: #ffffe2;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(255, 255, 226, 0.2);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 8px;
 }
 
+.tier-label-text {
+  font-family: 'Array', sans-serif;
+  font-size: 11px;
+  color: #8a8a8a;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Cream body section */
+.tier-body {
+  padding: 20px 24px 24px;
+  text-align: center;
+}
+
+/* Tier name - in cream body */
+.tier-name {
+  font-family: 'Khand', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+
+/* Description */
+.tier-subtext {
+  font-family: 'Array', sans-serif;
+  font-size: 11px;
+  color: #6a6a6a;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+/* Profit display */
+.tier-profit {
+  font-family: 'Array', sans-serif;
+  font-size: 36px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.tier-profit-label {
+  font-family: 'Array', sans-serif;
+  font-size: 10px;
+  color: #6a6a6a;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Remove old color accents */
 /* ============================================
    AI INTEGRATION SECTION
    ============================================ */
@@ -686,7 +698,11 @@
    RESPONSIVE DESIGN
    ============================================ */
 @media (max-width: 1200px) {
-  .calculator-sliders {
+  .home-value-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .home-results-tiers {
     grid-template-columns: repeat(3, 1fr);
   }
   
@@ -701,22 +717,34 @@
 }
 
 @media (max-width: 968px) {
-  .calculator-sliders {
+  .home-value-cards {
     grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .calculator-results {
-    grid-template-columns: 1fr;
     gap: 20px;
   }
   
-  .tier-gold {
-    transform: scale(1);
-    order: -1;
+  .home-results-tiers {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
   
-  .tier-gold:hover {
-    transform: translateY(-4px);
+  .home-results-tiers.visible {
+    max-height: 1200px;
+  }
+  
+  .tier-header {
+    padding: 24px 20px 20px;
+  }
+  
+  .tier-body {
+    padding: 16px 20px 20px;
+  }
+  
+  .tier-percent {
+    font-size: 38px;
+  }
+  
+  .tier-profit {
+    font-size: 32px;
   }
 
   .ai-integration {
@@ -773,39 +801,56 @@
   }
 
   /* Calculator responsive */
-  .calculator-section {
-    padding: 60px 20px;
+  .home-value-section {
+    padding: 50px 20px;
   }
-  
-  .calculator-title {
+
+  .home-value-title {
     font-size: 36px;
+    margin-bottom: 10px;
   }
-  
-  .calculator-subtitle {
-    font-size: 16px;
-    margin-bottom: 36px;
+
+  .home-value-subtitle {
+    font-size: 15px;
+    margin-bottom: 28px;
   }
-  
-  .calculator-sliders {
+
+  .home-value-cards {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  
-  .calc-slider-group {
-    padding: 20px 18px;
+
+  .home-value-card {
+    padding: 28px 20px;
+    min-height: 200px;
   }
-  
-  .calc-slider-value {
+
+  .home-value-number {
+    font-size: 38px;
+  }
+
+  .home-value-card:nth-child(3) .home-value-number {
+    font-size: 28px;
+  }
+
+  .home-value-calculate {
     font-size: 24px;
   }
   
-  .tier-profit {
-    font-size: 36px;
+  .home-results-tiers {
+    margin-top: 32px;
   }
   
-  .calculator-cta-button {
-    padding: 14px 32px;
-    font-size: 14px;
+  .tier-percent {
+    font-size: 32px;
+  }
+  
+  .tier-name {
+    font-size: 20px;
+  }
+  
+  .tier-profit {
+    font-size: 32px;
   }
   
   /* CTA responsive */
@@ -917,42 +962,79 @@
   }
 
   /* Calculator responsive */
-  .calculator-section {
-    padding: 50px 20px;
+  .home-value-section {
+    padding: 40px 20px;
   }
-  
-  .calculator-title {
+
+  .home-value-title {
     font-size: 28px;
+    margin-bottom: 8px;
   }
-  
-  .calculator-subtitle {
-    font-size: 15px;
-    margin-bottom: 28px;
+
+  .home-value-subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
   }
-  
-  .calc-slider-label {
-    font-size: 11px;
+
+  .home-value-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
-  
-  .calc-slider-value {
+
+  .home-value-card {
+    padding: 24px 20px;
+    min-height: 180px;
+  }
+
+  .home-value-number {
+    font-size: 34px;
+  }
+
+  .home-value-card:nth-child(3) .home-value-number {
+    font-size: 26px;
+  }
+
+  .home-value-label {
+    font-size: 10px;
+    margin-bottom: 10px;
+  }
+
+  .home-value-calculate {
     font-size: 22px;
   }
   
-  .tier-name {
-    font-size: 20px;
+  .home-results-tiers {
+    margin-top: 24px;
+    gap: 12px;
   }
   
-  .tier-profit {
+  .tier-header {
+    padding: 20px 16px 16px;
+  }
+  
+  .tier-body {
+    padding: 14px 16px 18px;
+  }
+  
+  .tier-percent {
     font-size: 32px;
   }
   
-  .tier-subtext {
-    font-size: 12px;
+  .tier-name {
+    font-size: 16px;
   }
   
-  .calculator-cta-button {
-    padding: 12px 24px;
-    font-size: 13px;
+  .tier-subtext {
+    font-size: 10px;
+    margin-bottom: 12px;
+  }
+  
+  .tier-profit {
+    font-size: 28px;
+  }
+  
+  .tier-profit-label {
+    font-size: 9px;
   }
   
   /* Partners responsive */
