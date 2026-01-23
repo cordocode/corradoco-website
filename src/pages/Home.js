@@ -3,7 +3,6 @@ import './Home.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Modal from '../components/Modal';
-import Slider from '../components/Slider';
 import BIRDS from 'vanta/dist/vanta.birds.min';
 // NOTE: Three.js loaded via CDN in index.html
 
@@ -43,12 +42,12 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalSubtitle, setModalSubtitle] = useState('');
 
-  // ============ VALUE CALCULATOR STATE ============
-  const [employees, setEmployees] = useState(10);
-  const [hours, setHours] = useState(5);
-  const [salary, setSalary] = useState(75000);
-  const [result, setResult] = useState(0);
-  const [showResult, setShowResult] = useState(false);
+  // ============ CALCULATOR STATE ============
+  const [bidsPerYear, setBidsPerYear] = useState(50);
+  const [winRate, setWinRate] = useState(15);
+  const [contractValue, setContractValue] = useState(2500000);
+  const [hoursPerBid, setHoursPerBid] = useState(80);
+  const [profitMargin, setProfitMargin] = useState(4);
 
   // ============ OPEN MODAL WITH SPECIFIC SUBTITLE ============
   const openModal = (subtitle) => {
@@ -58,13 +57,42 @@ const Home = () => {
 
   // ============ FORMAT CURRENCY ============
   const formatCurrency = (value) => {
-    return value.toLocaleString('en-US');
+    if (value >= 1000000) {
+      return '$' + (value / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    } else if (value >= 1000) {
+      return '$' + (value / 1000).toFixed(0) + 'k';
+    }
+    return '$' + value.toLocaleString('en-US');
   };
+
+  const formatFullCurrency = (value) => {
+    return '$' + Math.round(value).toLocaleString('en-US');
+  };
+
+  // ============ CALCULATOR LOGIC ============
+  const calculateTierProfit = (automationPercent) => {
+    // Current Profit Per Bid = Contract Value × Win Rate × Profit Margin
+    const currentProfitPerBid = contractValue * (winRate / 100) * (profitMargin / 100);
+    
+    // Multiplier = 1 / (1 - automation%)
+    const multiplier = 1 / (1 - automationPercent);
+    
+    // New Bids Possible = (Total Bids × Multiplier) - Total Bids
+    const newBidsPossible = (bidsPerYear * multiplier) - bidsPerYear;
+    
+    // Additional Profit = New Bids × Profit Per Bid
+    const additionalProfit = newBidsPossible * currentProfitPerBid;
+    
+    return additionalProfit;
+  };
+
+  const tier1Profit = calculateTierProfit(0.10); // 10% automation
+  const tier2Profit = calculateTierProfit(0.25); // 25% automation
+  const tier3Profit = calculateTierProfit(0.50); // 50% automation
 
   // ============ PARTNERS CAROUSEL STATE ============
   const scrollRef = useRef(null);
   
-  // Reordered: procore and autodesk near the beginning
   const logos = [
     { id: 1, src: procore, alt: 'Procore', name: 'procore' },
     { id: 2, src: autodesk, alt: 'Autodesk', name: 'autodesk' },
@@ -76,7 +104,6 @@ const Home = () => {
     { id: 8, src: claude, alt: 'Claude', name: 'claude' },
     { id: 9, src: cmic, alt: 'CMiC', name: 'cmic' },
     { id: 10, src: microsoft, alt: 'Microsoft', name: 'microsoft' },
-    // Duplicates for seamless carousel loop
     { id: 11, src: procore, alt: 'Procore', name: 'procore' },
     { id: 12, src: autodesk, alt: 'Autodesk', name: 'autodesk' },
     { id: 13, src: fleetAdvisor, alt: 'Fleet Advisor', name: 'fleet-advisor' },
@@ -94,43 +121,43 @@ const Home = () => {
     {
       id: 1,
       icon: iconInternalKnowledge,
-      title: 'Project Search',
-      tagline: 'Find any drawing, spec, or RFI response in seconds',
+      title: 'Instant Scope Creation',
+      tagline: 'Generate detailed, trade-specific scope sheets from your drawing sets in seconds, not hours.',
       illustration: illustrationInternalKnowledge
     },
     {
       id: 2,
       icon: iconCustomerPortal,
-      title: 'COI Compliance',
-      tagline: 'Auto-track and chase expired sub policies',
+      title: 'Smart Sub Outreach',
+      tagline: 'Personalized, automated invitations that track engagement and answer basic scope questions for you.',
       illustration: illustrationCustomerPortal
     },
     {
       id: 3,
       icon: iconDocumentIntelligence,
-      title: 'Lien Waiver Collection',
-      tagline: 'Auto-request and match waivers to payments',
+      title: 'Centralized Bid Tracking',
+      tagline: 'Stop tracking status in your head. See exactly who has bid, who is reviewing, and who needs a nudge.',
       illustration: illustrationDocumentIntelligence
     },
     {
       id: 4,
       icon: iconDataBridge,
-      title: 'Invoice Processing',
-      tagline: 'Auto-code, route, and track AP approvals',
+      title: 'Assisted Bid Leveling',
+      tagline: 'AI normalizes inconsistent quotes so you can compare apples-to-apples without the manual data entry.',
       illustration: illustrationDataBridge
     },
     {
       id: 5,
       icon: iconIntelligentDoc,
-      title: 'RFI Tracking',
-      tagline: 'Auto-route and escalate unanswered requests',
+      title: 'Intelligent Scope Review',
+      tagline: 'Your AI intern flags missing inclusions or exclusions on every quote before you commit to a number.',
       illustration: illustrationIntelligentDoc
     },
     {
       id: 6,
       icon: iconProactiveFollowUp,
-      title: 'Vendor Follow-Up',
-      tagline: 'Auto-chase quotes and bid responses',
+      title: 'Automated Data Transfer',
+      tagline: 'Push your final leveled numbers directly into your master estimate. No copy-pasting, no typos.',
       illustration: illustrationProactiveFollowUp
     }
   ];
@@ -223,110 +250,168 @@ const Home = () => {
       <section className="hero" ref={vantaRef}>
         <div className="hero-container">
           <h1 className="hero-headline">
-            Eliminating the Work<br />
-            Contractors <span className="hate-emphasis">Hate.</span>
+            Double Your Bidding Capacity.
           </h1>
           <p className="hero-subheadline">
-            We help you identify, design, and build tailored automations by integrating the tools you already have into value adding solutions.
+            Give your estimators a super-intelligent AI assistant. We automate the manual grunt work—chasing subs, entering data, and reviewing scope—so your team can bid 2x more work with the same headcount.
           </p>
-          <button className="hero-cta-button" onClick={() => openModal("Discover how custom automation can transform your operations.")}>
-            See What's Possible
+          <button className="hero-cta-button" onClick={() => openModal("See how AI can double your bidding capacity.")}>
+            Request a Demo
           </button>
         </div>
       </section>
 
-      {/* VALUE CALCULATOR SECTION */}
-      <section className="home-value-section">
-        <div className="home-value-container">
-          <h2 className="home-value-title">Unlock Your Team's Potential</h2>
-          <p className="home-value-subtitle">Small time savings add up big over the course of a year.</p>
+      {/* PRE-CONSTRUCTION POTENTIAL CALCULATOR */}
+      <section className="calculator-section">
+        <div className="calculator-container">
+          <h2 className="calculator-title">Pre-Construction Potential</h2>
+          <p className="calculator-subtitle">
+            See how much additional profit you could generate by reinvesting time saved into bidding more projects.
+          </p>
           
-          <div className="home-value-cards">
-            {/* Card 1: Employees */}
-            <div className="home-value-card">
-              <div className="home-value-number">{employees}</div>
-              <div className="home-value-label">Employees</div>
-              <div className="home-value-slider-wrapper">
-                <Slider
-                  value={employees}
-                  onChange={(val) => {
-                    setEmployees(val);
-                    setShowResult(false);
-                  }}
-                  min={1}
-                  max={500}
-                  width="100%"
-                  displayValue=""
-                  suffix=""
-                />
+          {/* Sliders Grid */}
+          <div className="calculator-sliders">
+            {/* Slider 1: Total Bids Per Year */}
+            <div className="calc-slider-group">
+              <div className="calc-slider-header">
+                <span className="calc-slider-label">Total Bids Per Year</span>
+                <span className="calc-slider-value">{bidsPerYear}</span>
+              </div>
+              <input
+                type="range"
+                className="calc-slider"
+                min={10}
+                max={500}
+                step={5}
+                value={bidsPerYear}
+                onChange={(e) => setBidsPerYear(Number(e.target.value))}
+              />
+              <div className="calc-slider-range">
+                <span>10</span>
+                <span>500</span>
               </div>
             </div>
 
-            {/* Card 2: Hours */}
-            <div className="home-value-card">
-              <div className="home-value-number">{hours}</div>
-              <div className="home-value-label">Hours Per Week</div>
-              <div className="home-value-slider-wrapper">
-                <Slider
-                  value={hours}
-                  onChange={(val) => {
-                    setHours(val);
-                    setShowResult(false);
-                  }}
-                  min={1}
-                  max={30}
-                  width="100%"
-                  displayValue=""
-                  suffix=""
-                />
+            {/* Slider 2: Win Rate */}
+            <div className="calc-slider-group">
+              <div className="calc-slider-header">
+                <span className="calc-slider-label">Win Rate</span>
+                <span className="calc-slider-value">{winRate}%</span>
+              </div>
+              <input
+                type="range"
+                className="calc-slider"
+                min={5}
+                max={50}
+                step={1}
+                value={winRate}
+                onChange={(e) => setWinRate(Number(e.target.value))}
+              />
+              <div className="calc-slider-range">
+                <span>5%</span>
+                <span>50%</span>
               </div>
             </div>
 
-            {/* Card 3: Salary */}
-            <div className="home-value-card">
-              <div className="home-value-number">${formatCurrency(salary)}</div>
-              <div className="home-value-label">Average Salary</div>
-              <div className="home-value-slider-wrapper">
-                <Slider
-                  value={salary}
-                  onChange={(val) => {
-                    setSalary(val);
-                    setShowResult(false);
-                  }}
-                  min={40000}
-                  max={200000}
-                  step={5000}
-                  width="100%"
-                  displayValue=""
-                  suffix=""
-                />
+            {/* Slider 3: Avg Contract Value */}
+            <div className="calc-slider-group">
+              <div className="calc-slider-header">
+                <span className="calc-slider-label">Avg. Contract Value</span>
+                <span className="calc-slider-value">{formatCurrency(contractValue)}</span>
+              </div>
+              <input
+                type="range"
+                className="calc-slider"
+                min={500000}
+                max={50000000}
+                step={100000}
+                value={contractValue}
+                onChange={(e) => setContractValue(Number(e.target.value))}
+              />
+              <div className="calc-slider-range">
+                <span>$500k</span>
+                <span>$50M</span>
               </div>
             </div>
 
-            {/* Card 4: Calculate/Result */}
-            <div 
-              className={`home-value-card home-value-card-result ${showResult ? 'calculated' : ''}`}
-              onClick={() => {
-                if (!showResult) {
-                  const hourlyRate = salary / 2000;
-                  const totalHours = employees * hours * 52;
-                  const annualCost = Math.round(totalHours * hourlyRate);
-                  setResult(annualCost);
-                  setShowResult(true);
-                }
-              }}
-            >
-              <div className="home-value-result-content">
-                {!showResult ? (
-                  <div className="home-value-calculate">Calculate</div>
-                ) : (
-                  <>
-                    <div className="home-value-result-number" key={result}>${formatCurrency(result)}</div>
-                    <div className="home-value-result-label">Annual Value</div>
-                  </>
-                )}
+            {/* Slider 4: Man-Hours Per Bid */}
+            <div className="calc-slider-group">
+              <div className="calc-slider-header">
+                <span className="calc-slider-label">Avg. Man-Hours Per Bid</span>
+                <span className="calc-slider-value">{hoursPerBid} hrs</span>
+              </div>
+              <input
+                type="range"
+                className="calc-slider"
+                min={20}
+                max={400}
+                step={10}
+                value={hoursPerBid}
+                onChange={(e) => setHoursPerBid(Number(e.target.value))}
+              />
+              <div className="calc-slider-range">
+                <span>20 hrs</span>
+                <span>400 hrs</span>
               </div>
             </div>
+
+            {/* Slider 5: Net Profit Margin */}
+            <div className="calc-slider-group">
+              <div className="calc-slider-header">
+                <span className="calc-slider-label">Net Profit Margin</span>
+                <span className="calc-slider-value">{profitMargin}%</span>
+              </div>
+              <input
+                type="range"
+                className="calc-slider"
+                min={1}
+                max={15}
+                step={0.5}
+                value={profitMargin}
+                onChange={(e) => setProfitMargin(Number(e.target.value))}
+              />
+              <div className="calc-slider-range">
+                <span>1%</span>
+                <span>15%</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Results Tiers */}
+          <div className="calculator-results">
+            {/* Tier 1: Bronze */}
+            <div className="result-tier tier-bronze">
+              <div className="tier-badge">10% Automation</div>
+              <h3 className="tier-name">The Efficiency Bump</h3>
+              <p className="tier-subtext">Removing simple admin & data entry</p>
+              <div className="tier-profit">+{formatFullCurrency(tier1Profit)}</div>
+              <p className="tier-label">Additional Annual Profit</p>
+            </div>
+
+            {/* Tier 2: Silver */}
+            <div className="result-tier tier-silver">
+              <div className="tier-badge">25% Automation</div>
+              <h3 className="tier-name">The Growth Mode</h3>
+              <p className="tier-subtext">Streamlining scope sheets & outreach</p>
+              <div className="tier-profit">+{formatFullCurrency(tier2Profit)}</div>
+              <p className="tier-label">Additional Annual Profit</p>
+            </div>
+
+            {/* Tier 3: Gold */}
+            <div className="result-tier tier-gold">
+              <div className="tier-badge">50% Automation</div>
+              <h3 className="tier-name">The Market Leader</h3>
+              <p className="tier-subtext">Full "Intelligent Intern" integration</p>
+              <div className="tier-profit">+{formatFullCurrency(tier3Profit)}</div>
+              <p className="tier-label">Additional Annual Profit</p>
+            </div>
+          </div>
+
+          {/* CTA Button */}
+          <div className="calculator-cta">
+            <button className="calculator-cta-button" onClick={() => openModal("Let's explore your pre-construction potential together.")}>
+              Unlock Your Potential → Book Discovery
+            </button>
           </div>
         </div>
       </section>

@@ -87,16 +87,16 @@ const Flow = () => {
     {
       id: 2,
       number: '02',
-      title: 'Find the Right Process to Automate',
-      subtitle: 'Identify repetitive tasks that waste time',
-      description: 'We look for manual processes that happen over and over—things like data entry, sending follow-up emails, organizing files, or pulling information from different systems. The goal is to find tasks that eat up hours but don\'t require complex human judgment. We start small with one high-impact process rather than trying to automate everything at once.'
+      title: 'Process Audit',
+      subtitle: 'Map your unique bidding workflow',
+      description: 'Every general contractor approaches pre-construction differently. We dive deep into your specific operations to ensure our solution slots seamlessly into your current infrastructure—enhancing your existing process rather than forcing you to change it.'
     },
     {
       id: 3,
       number: '03',
-      title: 'Build the System',
-      subtitle: 'Create automation that actually works',
-      description: 'We build the automation using tools like n8n, Zapier, or custom code depending on what you need. If AI is involved, we set up a knowledge base so it can access your company information reliably. We test everything thoroughly to make sure it handles real-world scenarios, not just perfect conditions.'
+      title: 'System Integration',
+      subtitle: 'Connect AI to your existing tools',
+      description: 'We configure the system to live where your team already works. Whether that\'s Outlook, BuildingConnected, or Excel, we handle the technical heavy lifting to establish a secure, invisible link between your data and our AI assistants.'
     },
     {
       id: 4,
