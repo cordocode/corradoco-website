@@ -326,7 +326,7 @@ const Home = () => {
                 <input
                   type="range"
                   className="home-calc-slider"
-                  min={2500000}
+                  min={250000}
                   max={100000000}
                   step={100000}
                   value={contractValue}
