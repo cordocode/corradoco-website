@@ -186,12 +186,24 @@ const Blog = () => {
     try {
       const postSlug = generateSlug(formData.title);
       
-      // If this post is being set as featured, unfeature all other posts first
+      // FIXED: If setting this post as featured, first unfeature ALL currently featured posts
+      // This runs unconditionally when featured=true, with proper error handling
       if (formData.featured) {
-        await supabase
+        console.log('Unfeaturing all currently featured posts...');
+        
+        const { data: unfeatureData, error: unfeatureError } = await supabase
           .from('blog_posts')
           .update({ featured: false })
-          .neq('id', editingPost || '');
+          .eq('featured', true)
+          .select();
+        
+        if (unfeatureError) {
+          console.error('Failed to unfeature existing posts:', unfeatureError);
+          alert('Error updating featured status. Please try again.');
+          return; // Stop here - don't save the post if unfeaturing failed
+        }
+        
+        console.log('Unfeatured posts:', unfeatureData?.length || 0);
       }
       
       const postData = {
@@ -204,6 +216,7 @@ const Blog = () => {
       };
 
       if (editingPost) {
+        // Updating existing post
         const { error } = await supabase
           .from('blog_posts')
           .update(postData)
@@ -211,6 +224,7 @@ const Blog = () => {
 
         if (error) throw error;
       } else {
+        // Creating new post
         const { error } = await supabase
           .from('blog_posts')
           .insert([postData]);
@@ -552,7 +566,7 @@ const Blog = () => {
             <div className="blog-loading">
               <p>Loading posts...</p>
             </div>
-          ) : posts.length === 0 ? (
+          ) : posts.length === 0 && !featuredPost ? (
             <div className="blog-empty">
               <h2 className="empty-title">No Posts Yet</h2>
               <p className="empty-subtitle">
